@@ -1,0 +1,795 @@
+<html class="not-embedded">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>CBS News: SoCal fires evacuation map</title>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.css">
+    <script src="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.js"></script>
+    <script src="chrome-extension://amkbmndfnliijdhojkpoglbnaaahippg/image/inject.js" id="imt-image-inject"></script>
+    <script type="text/javascript" src="https://pym.nprapps.org/pym.v1.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@2.3.0/dist/maplibre-gl.css">
+    <link rel="stylesheet" href="https://use.typekit.net/rdn8fde.css">
+    <style>
+        @font-face {
+            font-family: "Publico Headline";
+            src: url("fonts/PublicoHeadline-Black.woff2") format("woff2"),
+                url("fonts/PublicoHeadline-Black.woff") format("woff");
+        }
+
+
+        body {
+            margin: 0 !important;
+        }
+
+        a {
+            text-decoration: underline;
+            text-decoration-color: #A5091E;
+            color: #858585;
+        }
+
+        a:hover {
+            cursor: pointer;
+            color: #A5091E
+        }
+
+        a#source {
+            color: #858585;
+            text-decoration: none;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #header {
+            z-index: 1;
+            max-width: 980px;
+        }
+
+        .title {
+            font-family: "Publico Headline", serif;
+            line-height: 34px;
+            font-size: 32px;
+            color: rgb(0, 0, 0);
+        }
+
+        .description {
+            font-family: "proxima-nova", sans-serif;
+            font-size: 16px;
+            line-height: 1.3;
+            max-width: 980px;
+            margin-top: 12px;
+        }
+
+        .legend {
+            display: flex;
+            align-items: center;
+            font-family: "proxima-nova", sans-serif;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        span.legend-title {
+            font-size: 16px;
+            font-family: "proxima-nova", sans-serif;
+        }
+
+        .legend div {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border-radius: 2px;
+        }
+
+        .legend span {
+            margin-right: 15px;
+            font-family: "proxima-nova", sans-serif;
+        }
+
+        .evac_order {
+            font-weight: bold;
+            /* color:#820415; */
+            text-decoration: underline;
+            text-decoration-color: #820415;
+            text-decoration-thickness: 3px;
+        }
+
+        .evac_warning {
+            font-weight: bold;
+            /* color:#fd8724; */
+            text-decoration: underline;
+            text-decoration-color: #fd8724;
+            text-decoration-thickness: 3px;
+        }
+
+        .order {
+            background-color: #820415;
+        }
+
+        .warning {
+            background-color: #fd8724;
+        }
+
+        #map {
+            flex-grow: 1;
+            max-height: 900px;
+            max-width: 980px;
+            margin-bottom: 12px;
+        }
+
+        button.maplibregl-ctrl-compass {
+            display: none !important;
+        }
+
+
+        /* MEDIA QUERY */
+        @media (max-width: 430px) {
+            #map {
+                max-height: 900px !important;
+            }
+
+            .description {
+                margin-bottom: 10px;
+            }
+
+            .legend {
+                display: flex;
+                align-items: center;
+                font-family: "proxima-nova", sans-serif;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+            span.legend-title {
+                font-size: 14px;
+                font-family: "proxima-nova", sans-serif;
+            }
+
+            .legend div {
+                width: 15px;
+                height: 15px;
+                margin-right: 4px;
+                border-radius: 2px;
+            }
+
+            .legend span {
+                font-family: "proxima-nova", sans-serif;
+            }
+
+            .none {
+                background-color: #cccccc;
+                /* margin-left: 10px; */
+            }
+        }
+
+        .note {
+            font-family: "proxima-nova", sans-serif;
+            font-size: 16px;
+        }
+
+        .source {
+            font-family: "proxima-nova", sans-serif;
+            color: rgb(130, 130, 130);
+            font-size: 14px;
+        }
+    </style>
+    <style data-id="immersive-translate-input-injected-css">
+        .immersive-translate-input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 2147483647;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .immersive-translate-attach-loading::after {
+            content: " ";
+
+            --loading-color: #f78fb6;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: block;
+            margin: 12px auto;
+            position: relative;
+            color: white;
+            left: -100px;
+            box-sizing: border-box;
+            animation: immersiveTranslateShadowRolling 1.5s linear infinite;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-2000%, -50%);
+            z-index: 100;
+        }
+
+        .immersive-translate-loading-spinner {
+            vertical-align: middle !important;
+            width: 10px !important;
+            height: 10px !important;
+            display: inline-block !important;
+            margin: 0 4px !important;
+            border: 2px rgba(221, 244, 255, 0.6) solid !important;
+            border-top: 2px rgba(0, 0, 0, 0.375) solid !important;
+            border-left: 2px rgba(0, 0, 0, 0.375) solid !important;
+            border-radius: 50% !important;
+            padding: 0 !important;
+            -webkit-animation: immersive-translate-loading-animation 0.6s infinite linear !important;
+            animation: immersive-translate-loading-animation 0.6s infinite linear !important;
+        }
+
+        @-webkit-keyframes immersive-translate-loading-animation {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+
+            to {
+                -webkit-transform: rotate(359deg);
+            }
+        }
+
+        @keyframes immersive-translate-loading-animation {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(359deg);
+            }
+        }
+
+        .immersive-translate-input-loading {
+            --loading-color: #f78fb6;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: block;
+            margin: 12px auto;
+            position: relative;
+            color: white;
+            left: -100px;
+            box-sizing: border-box;
+            animation: immersiveTranslateShadowRolling 1.5s linear infinite;
+        }
+
+        @keyframes immersiveTranslateShadowRolling {
+            0% {
+                box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0),
+                    0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+            }
+
+            12% {
+                box-shadow: 100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0),
+                    0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+            }
+
+            25% {
+                box-shadow: 110px 0 var(--loading-color), 100px 0 var(--loading-color),
+                    0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+            }
+
+            36% {
+                box-shadow: 120px 0 var(--loading-color), 110px 0 var(--loading-color),
+                    100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0);
+            }
+
+            50% {
+                box-shadow: 130px 0 var(--loading-color), 120px 0 var(--loading-color),
+                    110px 0 var(--loading-color), 100px 0 var(--loading-color);
+            }
+
+            62% {
+                box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color),
+                    120px 0 var(--loading-color), 110px 0 var(--loading-color);
+            }
+
+            75% {
+                box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+                    130px 0 var(--loading-color), 120px 0 var(--loading-color);
+            }
+
+            87% {
+                box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+                    200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color);
+            }
+
+            100% {
+                box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+                    200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+            }
+        }
+
+        .immersive-translate-toast {
+            display: flex;
+            position: fixed;
+            z-index: 2147483647;
+            left: 0;
+            right: 0;
+            top: 1%;
+            width: fit-content;
+            padding: 12px 20px;
+            margin: auto;
+            overflow: auto;
+            background: #fef6f9;
+            box-shadow: 0px 4px 10px 0px rgba(0, 10, 30, 0.06);
+            font-size: 15px;
+            border-radius: 8px;
+            color: #333;
+        }
+
+        .immersive-translate-toast-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .immersive-translate-toast-hidden {
+            margin: 0 20px 0 72px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .immersive-translate-toast-close {
+            color: #666666;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 0 10px;
+            cursor: pointer;
+        }
+
+        @media screen and (max-width: 768px) {
+            .immersive-translate-toast {
+                top: 0;
+                padding: 12px 0px 0 10px;
+            }
+
+            .immersive-translate-toast-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .immersive-translate-toast-hidden {
+                margin: 10px auto;
+            }
+        }
+
+        .immersive-translate-modal {
+            display: none;
+            position: fixed;
+            z-index: 2147483647;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            font-size: 15px;
+        }
+
+        .immersive-translate-modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 40px 24px 24px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 270px;
+            font-family: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu",
+                "Cantarell", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+                "Segoe UI Symbol", "Noto Color Emoji";
+            position: relative;
+        }
+
+        @media screen and (max-width: 768px) {
+            .immersive-translate-modal-content {
+                margin: 50% auto !important;
+            }
+        }
+
+        .immersive-translate-modal .immersive-translate-modal-content-in-input {
+            max-width: 500px;
+        }
+
+        .immersive-translate-modal-content-in-input .immersive-translate-modal-body {
+            text-align: left;
+            max-height: unset;
+        }
+
+        .immersive-translate-modal-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333333;
+        }
+
+        .immersive-translate-modal-body {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 400;
+            color: #333333;
+            word-break: break-all;
+            margin-top: 24px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .immersive-translate-modal-body {
+                max-height: 250px;
+                overflow-y: auto;
+            }
+        }
+
+        .immersive-translate-close {
+            color: #666666;
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .immersive-translate-close:hover,
+        .immersive-translate-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .immersive-translate-modal-footer {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .immersive-translate-btn {
+            width: fit-content;
+            color: #fff;
+            background-color: #ea4c89;
+            border: none;
+            font-size: 16px;
+            margin: 0 8px;
+            padding: 9px 30px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .immersive-translate-btn:hover {
+            background-color: #f082ac;
+        }
+
+        .immersive-translate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .immersive-translate-btn:disabled:hover {
+            background-color: #ea4c89;
+        }
+
+        .immersive-translate-cancel-btn {
+            /* gray color */
+            background-color: rgb(89, 107, 120);
+        }
+
+        .immersive-translate-cancel-btn:hover {
+            background-color: hsl(205, 20%, 32%);
+        }
+
+        .immersive-translate-action-btn {
+            background-color: transparent;
+            color: #ea4c89;
+            border: 1px solid #ea4c89;
+        }
+
+        .immersive-translate-btn svg {
+            margin-right: 5px;
+        }
+
+        .immersive-translate-link {
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-drag: none;
+            text-decoration: none;
+            color: #007bff;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .immersive-translate-primary-link {
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-drag: none;
+            text-decoration: none;
+            color: #ea4c89;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .immersive-translate-modal input[type="radio"] {
+            margin: 0 6px;
+            cursor: pointer;
+        }
+
+        .immersive-translate-modal label {
+            cursor: pointer;
+        }
+
+        .immersive-translate-close-action {
+            position: absolute;
+            top: 2px;
+            right: 0px;
+            cursor: pointer;
+        }
+
+        .imt-image-status {
+            background-color: rgba(0, 0, 0, 0.5) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 16px !important;
+        }
+
+        .imt-image-status img,
+        .imt-image-status svg,
+        .imt-img-loading {
+            width: 28px !important;
+            height: 28px !important;
+            margin: 0 0 8px 0 !important;
+            min-height: 28px !important;
+            min-width: 28px !important;
+            position: relative !important;
+        }
+
+        .imt-img-loading {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAtFBMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////oK74hAAAAPHRSTlMABBMIDyQXHwyBfFdDMSw+OjXCb+5RG51IvV/k0rOqlGRM6KKMhdvNyZBz9MaupmxpWyj437iYd/yJVNZeuUC7AAACt0lEQVRIx53T2XKiUBCA4QYOiyCbiAsuuGBcYtxiYtT3f6/pbqoYHVFO5r+iivpo6DpAWYpqeoFfr9f90DsYAuRSWkFnPO50OgR9PwiCUFcl2GEcx+N/YBh6pvKaefHlUgZd1zVe0NbYcQjGBfzrPE8Xz8aF+71D8gG6DHFPpc4a7xFiCDuhaWgKgGIJQ3d5IMGDrpS4S5KgpIm+en9f6PlAhKby4JwEIxlYJV9h5k5nee9GoxHJ2IDSNB0dwdad1NAxDJ/uXDHYmebdk4PdbkS58CIVHdYSUHTYYRWOJblWSyu2lmy3KNFVJNBhxcuGW4YBVCbYGRZwIooipHsNqjM4FbgOQqQqSKQQU9V8xmi1QlgHqQQ6DDBvRUVCDirs+EzGDGOQTCATgtYTnbCVLgsVgRE0T1QE0qHCFAht2z6dLvJQs3Lo2FQoDxWNUiBhaP4eRgwNkI+dAjVOA/kUrIDwf3CG8NfNOE0eiFotSuo+rBiq8tD9oY4Qzc6YJw99hl1wzpQvD7ef2M8QgnOGJfJw+EltQc+oX2yn907QB22WZcvlUpd143dqQu+8pCJZuGE4xCuPXJqqcs5sNpsI93Rmzym1k4Npk+oD1SH3/a3LOK/JpUBpWfqNySxWzCfNCUITuDG5dtuphrUJ1myeIE9bIsPiKrfqTai5WZxbhtNphYx6GEIHihyGFTI69lje/rxajdh0s0msZ0zYxyPLhYCb1CyHm9Qsd2H37Y3lugVwL9kNh8Ot8cha6fUNQ8nuXi5z9/ExsAO4zQrb/ev1yrCB7lGyQzgYDGuxq1toDN/JGvN+HyWNHKB7zEoK+PX11e12G431erGYzwmytAWU56fkMHY5JJnDRR2eZji3AwtIcrEV8Cojat/BdQ7XOwGV1e1hDjGGjXbdArm8uJZtCH5MbcctVX8A1WpqumJHwckAAAAASUVORK5CYII=");
+            background-size: 28px 28px;
+            animation: image-loading-rotate 1s linear infinite !important;
+        }
+
+        .imt-image-status span {
+            color: var(--bg-2, #fff) !important;
+            font-size: 14px !important;
+            line-height: 14px !important;
+            font-weight: 500 !important;
+            font-family: "PingFang SC", Arial, sans-serif !important;
+        }
+
+        @keyframes image-loading-rotate {
+            from {
+                transform: rotate(360deg);
+            }
+
+            to {
+                transform: rotate(0deg);
+            }
+        }
+    </style>
+</head>
+
+
+
+
+
+<!-- Fonts -->
+
+
+
+<body>
+    <div id="container">
+        <div id="header">
+            <div class="title">SoCal fires evacuation map</div>
+            <p class="description">The map below shows the current evacuation zones for fires in the Los Angeles area.
+                Use the
+                buttons to zoom in or out.</p>
+            <p class="description"><span class="evac_order">Evacuation orders</span> are lawful orders to leave because
+                of an immediate threat to life. These areas are lawfully closed to the public.</p>
+            <p class="description"><span class="evac_warning">Evacuation warnings</span> are notices of a potential
+                threat to life/property. Those who require additional time to evacuate should leave now.</p>
+            <div class="legend">
+                <div class="order"></div>
+                <span>Evacuation order</span>
+                <div class="warning"></div>
+                <span>Evacuation warning</span>
+            </div>
+        </div>
+        <div id="map" class="maplibregl-map">
+            <div
+                class="maplibregl-canvas-container maplibregl-interactive maplibregl-touch-drag-pan maplibregl-touch-zoom-rotate">
+                <canvas class="maplibregl-canvas" tabindex="0" aria-label="Map" role="region" width="238" height="734"
+                    style="width: 238px; height: 734px;"></canvas>
+            </div>
+            <div class="maplibregl-control-container">
+                <div class="maplibregl-ctrl-top-left ">
+                    <div class="maplibregl-ctrl maplibregl-ctrl-group"><button class="maplibregl-ctrl-zoom-in"
+                            type="button" title="Zoom in" aria-label="Zoom in" aria-disabled="false"><span
+                                class="maplibregl-ctrl-icon" aria-hidden="true"></span></button><button
+                            class="maplibregl-ctrl-zoom-out" type="button" title="Zoom out" aria-label="Zoom out"
+                            aria-disabled="false"><span class="maplibregl-ctrl-icon"
+                                aria-hidden="true"></span></button><button class="maplibregl-ctrl-compass" type="button"
+                            title="Reset bearing to north" aria-label="Reset bearing to north"><span
+                                class="maplibregl-ctrl-icon" aria-hidden="true"
+                                style="transform: rotate(0deg);"></span></button></div>
+                </div>
+                <div class="maplibregl-ctrl-top-right "></div>
+                <div class="maplibregl-ctrl-bottom-left "></div>
+                <div class="maplibregl-ctrl-bottom-right ">
+                    <details class="maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+                        open="">
+                        <summary class="maplibregl-ctrl-attrib-button" title="Toggle attribution"
+                            aria-label="Toggle attribution"></summary>
+                        <div class="maplibregl-ctrl-attrib-inner"><a href="https://maplibre.org/"
+                                target="_blank">MapLibre</a></div>
+                    </details>
+                </div>
+            </div>
+        </div>
+        <div class="note"></div>
+        <div class="source">
+            Map: Grace Manthey, Taylor Johnston and John Kelly / CBS News •
+            Source:
+            <a href="https://www.fire.ca.gov/" target="_blank" id="source">CalFire</a>
+        </div>
+    </div>
+
+    <script>
+        // Check if the user is on a mobile device
+        const isMobile = window.innerWidth <= 768; // Adjust breakpoint as needed
+
+        // Set different zoom levels for mobile and desktop
+        const initialZoom = isMobile ? 12 : 13.1; // Example: Lower zoom for mobile
+
+        // Initialize the MapLibre map
+        const map = new maplibregl.Map({
+            container: "map", // The container ID for the map
+            style: "https://raw.githubusercontent.com/go2garret/maps/main/src/assets/json/openStreetMap.json", // Your MapTiler or MapLibre style URL
+            center: [-118.38, 34.15], // Centered on the Palisades fire
+            zoom: 8, // Dynamically set initial zoom
+            maxZoom: 20,
+            minZoom: 6,
+        });
+
+        // Disable scroll zoom
+        map.scrollZoom.disable();
+
+        // Add zoom and rotation controls to the map.
+        map.addControl(new maplibregl.NavigationControl(), "top-left");
+
+
+        // Function to update the description dynamically
+        // function updateDescription(acresBurned) {
+        //   const descriptionElement = document.querySelector(".description");
+        //   const formattedAcres = acresBurned.toLocaleString(); // Add comma formatting
+        //   descriptionElement.innerHTML = `The map below shows the current perimeter of the Palisades Fire in California, which has burned about <b>${formattedAcres} acres</b>. Use the buttons to zoom in or out and see neighborhoods and building footprints.`;
+        // }
+
+        map.on("load", () => {
+            const layers = map.getStyle().layers;
+            // Find the index of the first symbol layer in the map style
+            let firstSymbolId;
+            for (let i = 0; i < layers.length; i++) {
+                if (layers[i].type === "symbol") {
+                    firstSymbolId = layers[i].id;
+                    break;
+                }
+            }
+
+            map.addSource("shapefile", {
+                type: "geojson",
+                data: "https://raw.githubusercontent.com/cbs-news-data/cali_fires/refs/heads/main/data/latest_cali_evac.geojson", // Replace with the path to your GeoJSON file
+            });
+
+            // Add a stroke (outline) layer
+            map.addLayer(
+                {
+                    id: "shapefile-layer-outline",
+                    type: "line",
+                    source: "shapefile",
+                    paint: {
+                        "line-color": [
+                            "match",
+                            ["get", "status"],
+                            "Evacuation Order",
+                            "#820415",
+                            "Evacuation Warning",
+                            "#fd8724",
+                            "white"
+                        ],
+                        "line-width": 1, // Adjust stroke width as needed
+                    },
+                },
+                firstSymbolId
+            ); //
+
+            map.addLayer(
+                {
+                    id: "shapefile-layer",
+                    type: "fill",
+                    source: "shapefile",
+                    paint: {
+                        "fill-color": [
+                            "match",
+                            ["get", "status"],
+                            "Evacuation Order",
+                            "#820415",
+                            "Evacuation Warning",
+                            "#fd8724",
+                            "white"
+                        ],
+                        "fill-opacity": 0.5,
+                    },
+                },
+                firstSymbolId
+            ); // Pass firstSymbolId as the second argument
+        });
+
+        // // Fetch the GeoJSON data to extract acres_burned
+        // fetch("https://raw.githubusercontent.com/cbs-news-data/cali_fires/refs/heads/main/data/latest_cali_fires.geojson")
+        //   .then((response) => response.json())
+        //   .then((data) => {
+        //     const acresBurned = Math.round(data.features[0].properties.acres_burned); // Round to nearest whole number
+        //     updateDescription(acresBurned); // Update description
+        //   })
+        //   .catch((error) => {
+        //     console.error("Error fetching GeoJSON data:", error);
+        //   });
+
+        // Extract the timestamp from the GeoJSON data and update the note section
+        fetch("https://raw.githubusercontent.com/cbs-news-data/cali_fires/refs/heads/main/data/latest_cali_evac.geojson")
+            .then(response => response.json())
+            .then(data => {
+                const timestamp = data.features[0].properties.timestamp; // Assuming the timestamp is in the 'properties' object
+                updateNoteSection(timestamp); // Pass timestamp to the function to update the note
+            })
+            .catch(error => {
+                console.error("Error fetching GeoJSON data:", error);
+            });
+
+        // Function to update the note with timestamp
+        function updateNoteSection(timestamp) {
+            const noteElement = document.querySelector(".note");
+
+            // Convert the timestamp into a Date object
+            const date = new Date(timestamp);
+            console.log(date)
+
+            // Get the month and day
+            const options = { month: 'short', day: 'numeric' };
+            const formattedDate = date.toLocaleDateString('en-US', options); // e.g., "Jan. 8"
+
+            // Add a period after the month abbreviation if it doesn't already have one
+            const formattedDateWithPeriod = formattedDate.replace(/([A-Za-z]+)\./, "$1.");
+
+            // Get the time in 12-hour format with 'a.m.' or 'p.m.'
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+            const ampm = hours >= 12 ? 'p.m.' : 'a.m.';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // The hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes; // Add leading zero for minutes if needed
+
+            const time = `${hours}:${minutes} ${ampm}`; // e.g., "7:00 a.m."
+
+            // Update the note with the formatted date and time
+            noteElement.innerHTML = `Note: Data as of ${formattedDateWithPeriod} at ${time} PST.`;
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            var pymChild = new pym.Child();
+            pymChild.sendHeight();
+        });
+    </script>
+</body>
+<div id="immersive-translate-popup" style="all: initial"></div>
+
+</html>

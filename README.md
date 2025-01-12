@@ -1,6 +1,8 @@
 # california-fire-maps-dash
 rough demo on california fire maps apps powered by dash, python
 
+suitable layout for desktop and mobile
+
 
 ## data source
 
