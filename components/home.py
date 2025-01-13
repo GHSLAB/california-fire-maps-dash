@@ -8,16 +8,35 @@ import feffery_leaflet_components as flc
 from feffery_dash_utils.style_utils import style
 
 
+def leaflet_render(center: tuple, zoom_level: int, height: str):
+    return flc.LeafletMap(
+        [
+            flc.LeafletTileLayer(
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                zIndex=1,
+            ),
+            flc.LeafletTileLayer(
+                url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
+                zIndex=10,
+            ),
+        ],
+        center=center,  # [34.198507, -118.139684]
+        zoom=zoom_level,
+        style={"height": height},
+    )
+
+
 def render():
     return [
         fac.AntdFlex(
             [
                 fac.AntdImage(
-                    src="/assets/imagery/fire.webp",
+                    src="/assets/rs/maxar.webp",
                     style={"width": "100%"},
                 ),
                 fac.AntdText("Source: The Associated Press/Maxar Technologies"),
                 fac.AntdText("2025.1.8 Wednesday"),
+                leaflet_render(center=[34.198507, -118.139684], zoom_level=10, height="300px"),
             ],
             vertical=True,
         )

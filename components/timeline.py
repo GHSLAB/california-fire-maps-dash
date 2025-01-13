@@ -51,8 +51,15 @@ def render():
                     fac.AntdFlex(
                         [
                             fac.AntdButton(
-                                "翻转时间线",
+                                "翻转",
                                 id="switch-timeline",
+                                disabled=False,
+                                type="primary",
+                                style=style(marginLeft="10px"),
+                            ),
+                            fac.AntdButton(
+                                "刷新",
+                                id="update-timeline",
                                 disabled=False,
                                 type="primary",
                                 style=style(marginLeft="10px"),
@@ -103,7 +110,11 @@ def render():
                 html.Div(
                     [
                         fac.AntdText(f"更新时间：{update_time}"),
-                        fac.AntdText("数据来源：福布斯", style=style(right=0)),
+                        html.A(
+                            "数据来源：福布斯",
+                            href="https://www.forbes.com/sites/antoniopequenoiv/2025/01/12/california-wildfire-live-updates-death-toll-hits-24-in-palisades-eaton-fires-as-heavy-wind-expected-in-coming-days/",
+                            style=style(position="absolute", right="10px", color="#8B8B8B"),
+                        ),
                     ],
                     style=style(paddingTop="10px"),
                 ),

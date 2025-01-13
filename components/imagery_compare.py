@@ -30,8 +30,19 @@ def get_all_files_list(directory: str) -> list:
 
 
 # 获取文件夹中的所有文件的相对路径
-damage_img_list = get_all_files_list("./assets/damage/")
+damage_img_list = get_all_files_list("./assets/news/damage/")
 # print(damage_img_list)
+
+
+def satelite_compare(img1_url, img2_url):
+    return html.Div(
+        fuc.FefferyCompareSlider(
+            firstItem=html.Img(src=img1_url, style={"width": "100%"}),
+            secondItem=html.Img(src=img2_url, style={"width": "100%"}),
+            style={"width": "100%"},
+        ),
+        style={"width": "100%"},
+    )
 
 
 def render():
@@ -41,41 +52,25 @@ def render():
                 fac.AntdTitle("卫星影像", level=4),
                 fac.AntdTitle("Eaton Fire", level=5),
                 fac.AntdText("Marathon Road in Altadena, California"),
-                fuc.FefferyCompareSlider(
-                    firstItem=html.Img(
-                        src=dash.get_asset_url("./imagery/img1.webp"), style={"width": "100%"}
-                    ),
-                    secondItem=html.Img(
-                        src=dash.get_asset_url("./imagery/img2.webp"), style={"width": "100%"}
-                    ),
-                    style={"width": "100%"},
-                ),
+                satelite_compare("./assets/imagery/img1.webp", "./assets/imagery/img2.webp"),
                 fac.AntdTitle("Palisades Fire", level=4),
                 fac.AntdText("Tuna Canyon in Los Angeles"),
-                fuc.FefferyCompareSlider(
-                    firstItem=html.Img(
-                        src=dash.get_asset_url("./imagery/img3.webp"), style={"width": "100%"}
-                    ),
-                    secondItem=html.Img(
-                        src=dash.get_asset_url("./imagery/img4.webp"), style={"width": "100%"}
-                    ),
-                    style={"width": "100%"},
-                ),
-                fac.AntdTitle("建筑损伤", level=4),
-                fac.AntdCarousel(
-                    [
-                        fac.AntdCenter(
-                            fac.AntdImage(
-                                src=img_url,
-                                style={"width": "100%"},
-                            )
-                        )
-                        for img_url in damage_img_list
-                    ],
-                    arrows=True,
-                    autoplay=True,
-                    autoplaySpeed=3000,  # 500毫秒切换一次
-                ),
+                satelite_compare("./assets/imagery/img3.webp", "./assets/imagery/img4.webp"),
+                # fac.AntdTitle("建筑损伤", level=4),
+                # fac.AntdCarousel(
+                #     [
+                #         fac.AntdCenter(
+                #             fac.AntdImage(
+                #                 src=img_url,
+                #                 style={"width": "100%"},
+                #             )
+                #         )
+                #         for img_url in damage_img_list
+                #     ],
+                #     arrows=True,
+                #     autoplay=True,
+                #     autoplaySpeed=3000,  # 500毫秒切换一次
+                # ),
             ],
             vertical=True,
         )
