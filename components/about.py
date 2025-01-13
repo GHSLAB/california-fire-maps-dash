@@ -13,12 +13,21 @@ def render():
         fac.AntdCenter(
             fac.AntdFlex(
                 [
+                    fac.AntdTitle("本应用仅为技术测试, 信息仅供参考", level=4),
                     fac.AntdText("欢迎扫码关注公众号交流"),
                     fac.AntdImage(
                         src="/assets/qrcode.png",
                         style=style(width="250px"),
                     ),
-                    fac.AntdText("数据源:"),
+                    fac.AntdDivider(),
+                    fac.AntdText("项目地址:"),
+                    html.A(
+                        "Github-GHSLAB/california-fire-maps-dash",
+                        href="https://github.com/GHSLAB/california-fire-maps-dash",
+                    ),
+                    fac.AntdDivider(),
+                    fac.AntdTitle("Powerby:", level=5),
+                    fac.AntdText("feffery-antd-components"),
                 ],
                 vertical=True,
             )

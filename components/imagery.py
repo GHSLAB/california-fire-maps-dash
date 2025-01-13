@@ -49,6 +49,8 @@ def render():
     return [
         fac.AntdFlex(
             [
+                fac.AntdTitle("数据源", level=5, className="subtitle"),
+                fac.AntdSelect(),
                 fac.AntdTitle("卫星影像", level=4),
                 fac.AntdTitle("Eaton Fire", level=5),
                 fac.AntdText("Marathon Road in Altadena, California"),

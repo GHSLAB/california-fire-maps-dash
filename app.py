@@ -8,7 +8,9 @@ from feffery_dash_utils.style_utils import style
 
 from dash.dependencies import Input, Output
 
-from server import app
+from server import app, config
+
+
 import mobile
 
 
@@ -35,5 +37,5 @@ def device_detect_demo(deviceInfo):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", port=config["server"]["port"], debug=True)
     # app.run(host="0.0.0.0", debug=False)

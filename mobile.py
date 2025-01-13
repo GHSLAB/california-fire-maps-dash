@@ -7,7 +7,7 @@ import feffery_leaflet_components as flc
 
 from feffery_dash_utils.style_utils import style
 
-from components import home, imagery_compare, timeline, about
+from components import home, dashboard, imagery, timeline, about
 
 
 def render():
@@ -25,16 +25,16 @@ def render():
                 {
                     "key": "数据",
                     "label": "数据",
-                    "children": imagery_compare.render(),
+                    "children": dashboard.render(),
                 },
                 {
                     "key": "影像",
                     "label": "影像",
-                    "children": imagery_compare.render(),
+                    "children": imagery.render(),
                 },
                 {
-                    "key": "时间线",
-                    "label": "时间线",
+                    "key": "时间",
+                    "label": "时间",
                     "children": timeline.render(),
                 },
                 {

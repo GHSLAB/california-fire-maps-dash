@@ -51,6 +51,8 @@ def render():
         html.Div(id="refresh-status"),
         html.Div(
             [
+                fac.AntdSpin(fac.AntdText(id="spin-refresh"), text="数据获取中"),
+                dcc.Store(id="timeline-data"),
                 fac.AntdSpace(
                     fac.AntdFlex(
                         [
@@ -151,6 +153,7 @@ def switch_timeline(nClicks, reverse):
 # 获取最新数据
 @app.callback(
     [
+        Output("spin-refresh", "children"),
         Output("refresh-status", "children"),
         Output("timeline", "items", allow_duplicate=True),
         Output("update-time", "children", allow_duplicate=True),
