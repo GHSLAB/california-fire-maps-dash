@@ -10,6 +10,9 @@ import json
 
 from server import app
 
+import utils.data_update
+import datetime
+
 
 def get_timeline_item(timeline_file: str) -> dict:
     with open(timeline_file, "r", encoding="utf-8") as file:
@@ -45,6 +48,7 @@ update_time = get_json_config("./data/forbes/update_time.json", "time")
 
 def render():
     return [
+        html.Div(id="refresh-status"),
         html.Div(
             [
                 fac.AntdSpace(
@@ -55,26 +59,27 @@ def render():
                                 id="switch-timeline",
                                 disabled=False,
                                 type="primary",
-                                style=style(marginLeft="10px"),
+                            ),
+                            fac.AntdTooltip(
+                                fac.AntdButton(
+                                    "实时数据",
+                                    id="update-timeline",
+                                    disabled=False,
+                                    style=style(marginLeft="10px"),
+                                ),
+                                title="信息提示示例",
                             ),
                             fac.AntdButton(
-                                "刷新",
-                                id="update-timeline",
-                                disabled=False,
-                                type="primary",
-                                style=style(marginLeft="10px"),
+                                fac.AntdIcon(
+                                    icon="md-translate",
+                                ),
+                                id="language-switch",
+                                variant="text",
+                                color="default",
+                                style=style(
+                                    position="absolute", right="10px", width="32px", height="32px"
+                                ),
                             ),
-                            # fac.AntdButton(
-                            #     fac.AntdIcon(
-                            #         icon="md-translate",
-                            #     ),
-                            #     id="language-switch",
-                            #     variant="text",
-                            #     color="default",
-                            #     style=style(
-                            #         position="absolute", right="10px", width="32px", height="32px"
-                            #     ),
-                            # ),
                         ],
                     ),
                     direction="horizontal",
@@ -85,7 +90,7 @@ def render():
                     [
                         fac.AntdSpace(
                             fac.AntdTimeline(
-                                id="timeline", pending="持续更新中", items=timeline_cn, reverse=True
+                                id="timeline", pending="NOW", items=timeline_cn, reverse=True
                             )
                         ),
                     ],
@@ -107,13 +112,17 @@ def render():
                     duration=1,
                     style=style(zIndex=1000),
                 ),
-                html.Div(
+                fac.AntdFlex(
                     [
-                        fac.AntdText(f"更新时间：{update_time}"),
+                        fac.AntdText(
+                            f"翻译时间：{update_time}",
+                            id="update-time",
+                            style=style(marginLeft="5px"),
+                        ),
                         html.A(
-                            "数据来源：福布斯",
+                            "from Forbes",
                             href="https://www.forbes.com/sites/antoniopequenoiv/2025/01/12/california-wildfire-live-updates-death-toll-hits-24-in-palisades-eaton-fires-as-heavy-wind-expected-in-coming-days/",
-                            style=style(position="absolute", right="10px", color="#8B8B8B"),
+                            style=style(position="absolute", right="15px", color="#8B8B8B"),
                         ),
                     ],
                     style=style(paddingTop="10px"),
@@ -139,15 +148,34 @@ def switch_timeline(nClicks, reverse):
             return False
 
 
-# # 回调
-# @app.callback(
-#     Output("timeline", "items", allow_duplicate=True),
-#     Input("language-switch", "nClicks"),
-#     State("timeline", "items"),
-#     prevent_initial_call=True,
-# )
-# def switch_language(nClicks, timeline_item):
-#     if nClicks and timeline_item == timeline_cn:
-#         return timeline_en
-#     else:
-#         return timeline_cn
+# 获取最新数据
+@app.callback(
+    [
+        Output("refresh-status", "children"),
+        Output("timeline", "items", allow_duplicate=True),
+        Output("update-time", "children", allow_duplicate=True),
+    ],
+    Input("update-timeline", "nClicks"),
+    prevent_initial_call=True,
+)
+def switch_language(nClicks):
+    if nClicks:
+        forbes_timeline = utils.data_update.get_forbes_timeline()
+        item_dict = []
+        for i in reversed(forbes_timeline):
+            item_dict.append(
+                {
+                    "content": fac.AntdFlex(
+                        [
+                            fac.AntdText(f"{i['time']}", style=style(fontWeight="bold")),
+                            fac.AntdText(f"{i['content']}"),
+                        ],
+                        vertical=True,
+                    )
+                }
+            )
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+        return [
+            item_dict,
+            f"更新时间：{current_time}",
+        ]

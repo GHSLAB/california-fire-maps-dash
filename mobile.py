@@ -23,14 +23,24 @@ def render():
                     "children": home.render(),
                 },
                 {
-                    "key": "影像对比",
-                    "label": "影像对比",
+                    "key": "数据",
+                    "label": "数据",
+                    "children": imagery_compare.render(),
+                },
+                {
+                    "key": "影像",
+                    "label": "影像",
                     "children": imagery_compare.render(),
                 },
                 {
                     "key": "时间线",
                     "label": "时间线",
                     "children": timeline.render(),
+                },
+                {
+                    "key": "参考",
+                    "label": "参考",
+                    "children": home.render(),
                 },
                 {
                     "key": "关于",
