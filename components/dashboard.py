@@ -7,32 +7,53 @@ import feffery_antd_charts as fact
 
 from dash.dependencies import Input, Output, State
 
+import json
+import geopandas as gpd
+
 from server import app
 
 
-data = [
-    {"lastvalue": 1, "name": "11.88数据备份"},
-    {"lastvalue": 2, "name": "2Zabbix server"},
-    {"lastvalue": 3, "name": "31.70 VPN服务器"},
-    {"lastvalue": 4, "name": "41.55 MES&APS 同步"},
-    {"lastvalue": 5, "name": "5桃子园核心交换机1"},
-]
+def read_json_file(file_path):
+    with open(file_path, "r") as file:
+        data = json.load(file)
+    return data
+
+
+## CBS 数据
+cbs_fire = read_json_file("./data/latest/cbs/latest_cali_fires.geojson")
+
+gdf_cbs_fire = gpd.GeoDataFrame.from_features(cbs_fire)
+gdf_cbs_fire["烧毁面积(km2)"] = round(gdf_cbs_fire["acres_burned"] * 0.00404686, 2)
+
+data = (
+    gdf_cbs_fire[["fire_name", "烧毁面积(km2)"]]
+    .sort_values(by="烧毁面积(km2)", ascending=False)
+    .to_dict("records")
+)
+
+chart_style = {
+    "backgroundColor": "rgba(240, 240, 240, 0.9)",
+    "borderRadius": "5px",
+    "boxShadow": "0 0 10px rgba(0, 0, 0, 0.5)",
+}
 
 
 def render():
     return [
-        fac.AntdTitle("房屋受损情况", level=5),
-        fact.AntdBar(
-            id="bar",
-            data=data,
-            xField="lastvalue",
-            yField="name",
-            xAxis={"label": None},
-            minBarWidth=20,
-            maxBarWidth=20,
-            height=250,
-        ),
-        fact.AntdColumn(
-            data=data, xField="name", yField="lastvalue", xAxis={"label": None}, height=250
+        fac.AntdTitle("烧毁面积", level=5),
+        html.Div(
+            fact.AntdBar(
+                id="bar",
+                data=data,
+                xField="烧毁面积(km2)",
+                yField="fire_name",
+                label={"position": "right"},
+                minBarWidth=20,
+                maxBarWidth=25,
+                height=250,
+                # theme="dark",
+                style=style(padding="10px"),
+            ),
+            style=chart_style,
         ),
     ]

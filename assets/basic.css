@@ -1,3 +1,18 @@
 .subtitle {
     margin-top: 0px;
 }
+
+
+.tooltip-as-label-demo {
+    font-size: 28px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    box-shadow: none;
+    -webkit-text-stroke: 1px white;
+}
+
+/*隐藏小箭头*/
+.tooltip-as-label-demo::before {
+    display: none;
+}

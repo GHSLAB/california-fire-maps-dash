@@ -20,7 +20,14 @@ app.layout = html.Div(
             style={"margin": "15px"},
         ),
     ],
-    style=style(width="100%"),
+    style={
+        "width": "100%",
+        "height": "100vh",
+        "backgroundImage": "url('/assets/background2.png')",
+        "backgroundSize": "cover",  # 调整背景图片的大小
+        "backgroundRepeat": "no-repeat",  # 防止图片重复
+        "backgroundPosition": "center",  # 居中背景图片
+    },
 )
 
 

@@ -28,6 +28,7 @@ logs/
 noteboooks/
 /noteboooks
 *.ipynb
+*.psd
 MANIFEST
 
 # PyInstaller

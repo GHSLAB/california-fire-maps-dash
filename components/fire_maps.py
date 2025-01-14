@@ -29,18 +29,34 @@ def write_json_file(file_path, data):
         json.dump(data, file)
 
 
+## CBS 数据
 cbs_fire = read_json_file("./data/latest/cbs/latest_cali_fires.geojson")
 cbs_evac = read_json_file("./data/latest/cbs/latest_cali_evac.geojson")
 
 gdf_cbs_evac = gpd.GeoDataFrame.from_features(cbs_evac)
-gdf_cbs_evac["category"] = gdf_cbs_evac["status"]
+cbs_data_time = gdf_cbs_evac["timestamp"].max()
 
-# 当使用 gdf.to_json() 生成 JSON 数据时，如果输出的字符串中带有反斜杠（\）
-# 这是因为生成的 JSON 数据被转义了。默认情况下，to_json() 方法返回的是一个字符串
-# 而字符串中的特殊字符（如引号 "）会被转义为 \"，因此会出现反斜杠
+gdf_cbs_fire = gpd.GeoDataFrame.from_features(cbs_fire)
 
+# 将英亩转换为平方千米（1英亩约等于0.00404686平方千米）
+gdf_cbs_fire["acres_burned_km2"] = gdf_cbs_fire["acres_burned"] * 0.00404686
+
+# 更新tooltip列
+gdf_cbs_fire["tooltip"] = (
+    gdf_cbs_fire["fire_name"].astype(str)
+    + "损毁面积"
+    + gdf_cbs_fire["acres_burned_km2"].round(2).astype(str)
+    + "平方千米"
+)
 
 cbs_style = {
+    "Fire": {
+        "color": "black",
+        "weight": 2,
+        "dashArray": "5, 2, 5",
+        "fillOpacity": 0.4,
+        "fillColor": "#DDDDDD",
+    },
     "Evacuation Warning": {
         "color": "#fd8724",
         "fillColor": "#fd8724",
@@ -66,6 +82,25 @@ def render():
                             # Basemap.arcgis_img(),
                             flc.LeafletTileLayer(id="tile-layer", zIndex=1, opacity=0.8),
                             Basemap.light_labels(),
+                            # flc.LeafletLayerGroup(
+                            #     flc.LeafletCircleMarker(center={"lng": -118.5, "lat": 34.198507}),
+                            #     id="cbs_fire_marker",
+                            # ),
+                            flc.LeafletLayerGroup(  # cbs_fire
+                                flc.LeafletGeoJSON(
+                                    # 使用json.loads()将gdf.to_json字符串转换为JSON格式
+                                    data=json.loads(gdf_cbs_fire.to_json()),
+                                    defaultStyle=cbs_style["Fire"],
+                                    fitBounds=False,
+                                    showTooltip=True,
+                                    featureTooltipField="tooltip",
+                                    hoverable=True,
+                                    tooltipDirection="center",
+                                ),
+                                id="cbs_fire",
+                                hidden=False,
+                                zIndex=100,
+                            ),
                             flc.LeafletLayerGroup(  # evac order
                                 flc.LeafletGeoJSON(
                                     # 使用json.loads()将gdf.to_json字符串转换为JSON格式
@@ -76,8 +111,8 @@ def render():
                                     ),
                                     defaultStyle=cbs_style["Evacuation Order"],
                                     fitBounds=False,
-                                    # mode="category",
-                                    # featureCategoryToStyles=cbs_style,
+                                    showTooltip=True,
+                                    featureTooltipField="status",
                                     hoverable=True,
                                 ),
                                 id="cbs_evac_order",
@@ -94,8 +129,8 @@ def render():
                                     ),
                                     defaultStyle=cbs_style["Evacuation Warning"],
                                     fitBounds=False,
-                                    # mode="category",
-                                    # featureCategoryToStyles=cbs_style,
+                                    showTooltip=True,
+                                    featureTooltipField="status",
                                     hoverable=True,
                                 ),
                                 id="cbs_evac_warning",
@@ -127,26 +162,52 @@ def render():
                     ),
                 ]
             ),
-            # fac.AntdText("Source: CalFire"),
+            fac.AntdFlex(
+                [
+                    fac.AntdText(
+                        "数据时间",
+                        style=style(fontWeight="bold"),
+                    ),
+                    fac.AntdText(f"{cbs_data_time} PST", style=style(marginLeft="5px")),
+                    fac.AntdText(
+                        "Source: CalFire",
+                        style=style(position="absolute", right="5px", color="#8B8B8B"),
+                    ),
+                ],
+                vertical=False,
+            ),
             fac.AntdSpace(
                 [
                     fac.AntdSpace(
                         [
-                            fac.AntdCheckbox(id="cbs_evac_check", label="疏散区域", checked=True),
-                            Legend.fill("疏散命令", "#820415"),
-                            Legend.fill("疏散警告", "#fd8724"),
+                            fac.AntdText(
+                                "受灾情况",
+                                style=style(fontWeight="bold"),
+                            ),
+                            fac.AntdCheckbox(id="burned_area_check", checked=False),
+                            Legend.fill("烧毁区域", cbs_style["Fire"]["fillColor"]),
+                            # Legend.fill("疏散警告", "#fd8724"),
                         ],
-                        direction="horizontal",
                         style=style(marginTop="5px"),
                     ),
                     fac.AntdSpace(
                         [
-                            fac.AntdCheckbox(
-                                id="burned_area_check", label="受灾区域", checked=False
+                            fac.AntdText(
+                                "疏散情况",
+                                style=style(fontWeight="bold"),
                             ),
-                            Legend.fill("疏散命令", "#820415"),
-                            # Legend.fill("疏散警告", "#fd8724"),
+                            fac.AntdCheckbox(
+                                id="cbs_evac_order_check",
+                                checked=True,
+                            ),
+                            Legend.fill("疏散命令", cbs_style["Evacuation Order"]["fillColor"]),
+                            fac.AntdCheckbox(
+                                id="cbs_evac_warning_check",
+                                checked=True,
+                            ),
+                            Legend.fill("疏散警告", cbs_style["Evacuation Warning"]["fillColor"]),
                         ],
+                        direction="horizontal",
                     ),
                 ],
                 direction="vertical",
@@ -157,11 +218,22 @@ def render():
 
 # 图层控制
 @dash.callback(
-    [Output("cbs_evac_order", "hidden"), Output("cbs_evac_warning", "hidden")],
-    Input("cbs_evac_check", "checked"),
+    Output("cbs_evac_order", "hidden"),
+    Input("cbs_evac_order_check", "checked"),
 )
-def cbs_evac_check(checked):
+def cbs_evac_order_check(checked):
     if checked:
-        return [False, False]
+        return False
     else:
-        return [True, True]
+        return True
+
+
+@dash.callback(
+    Output("cbs_evac_warning", "hidden"),
+    Input("cbs_evac_warning_check", "checked"),
+)
+def cbs_evac_warning_check(checked):
+    if checked:
+        return False
+    else:
+        return True
