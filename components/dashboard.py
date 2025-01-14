@@ -9,8 +9,6 @@ from dash.dependencies import Input, Output, State
 
 from server import app
 
-from dashboard_c import *
-
 
 data = [
     {"lastvalue": 1, "name": "11.88数据备份"},

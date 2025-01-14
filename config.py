@@ -20,3 +20,5 @@ class MapConfig:
     cal_center: tuple = [34.198507, -118.139684]
     deafult_center: dict = {"lat": 24, "lng": 118}
     deafult_zoom: int = 8
+
+    cbs_bounds = [-118.702282, 34.030885, -118.013125, 34.4410175]

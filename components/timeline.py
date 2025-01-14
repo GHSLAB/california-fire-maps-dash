@@ -40,10 +40,11 @@ def get_json_config(timeline_file: str, column: str) -> str:
 
 
 # timeline
-timeline_cn = get_timeline_item("./data/forbes/timeline_cn.json")
-timeline_en = get_timeline_item("./data/forbes/timeline.json")
+timeline = get_timeline_item("./data/forbes/timeline.json")
+update_time = get_json_config("./data/forbes/update_time.json", "Last updated")
 
-update_time = get_json_config("./data/forbes/update_time.json", "time")
+timeline_cn = get_timeline_item("./data/forbes/timeline_cn.json")
+translate_time = get_json_config("./data/forbes/translate_time.json", "Last updated")
 
 
 def render():
@@ -68,7 +69,7 @@ def render():
                                     disabled=False,
                                     style=style(marginLeft="10px"),
                                 ),
-                                title="信息提示示例",
+                                title="抓取实时数据, 请等待",
                             ),
                             fac.AntdButton(
                                 fac.AntdIcon(
@@ -92,7 +93,7 @@ def render():
                         # fac.AntdSpin(fac.AntdText(id="spin-refresh"), text="数据获取中"),
                         fac.AntdSpace(
                             fac.AntdTimeline(
-                                id="timeline", pending="NOW", items=timeline_cn, reverse=True
+                                id="timeline", pending="NOW", items=timeline, reverse=True
                             )
                         ),
                     ],
@@ -117,7 +118,7 @@ def render():
                 fac.AntdFlex(
                     [
                         fac.AntdText(
-                            f"翻译时间：{update_time}",
+                            f"更新时间: {update_time}",
                             id="update-time",
                             style=style(marginLeft="5px"),
                         ),
@@ -153,16 +154,18 @@ def switch_timeline(nClicks, reverse):
 # 获取最新数据
 @app.callback(
     [
-        Output("refresh-status", "children"),
         Output("timeline", "items", allow_duplicate=True),
         Output("update-time", "children", allow_duplicate=True),
     ],
     Input("update-timeline", "nClicks"),
     prevent_initial_call=True,
 )
-def switch_language(nClicks):
+def update_timeline(nClicks):
     if nClicks:
         forbes_timeline = utils.data_update.get_forbes_timeline()
+
+        print(forbes_timeline)
+
         item_dict = []
         for i in reversed(forbes_timeline):
             item_dict.append(
@@ -181,3 +184,22 @@ def switch_language(nClicks):
             item_dict,
             f"更新时间：{current_time}",
         ]
+
+
+# 切换翻译
+@app.callback(
+    [
+        Output("timeline", "items", allow_duplicate=True),
+        Output("update-time", "children", allow_duplicate=True),
+    ],
+    Input("language-switch", "nClicks"),
+    prevent_initial_call=True,
+)
+def switch_language(nClicks):
+    if nClicks:
+        # 计算nClicks是否为单数
+        is_odd = nClicks % 2 != 0
+        if is_odd:
+            return [timeline_cn, f"翻译时间: {translate_time}"]
+        else:
+            return [timeline, f"更新时间: {update_time}"]

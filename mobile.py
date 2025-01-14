@@ -9,6 +9,8 @@ from feffery_dash_utils.style_utils import style
 
 from components import home, dashboard, imagery, timeline, about
 
+from maps import cal_fire
+
 
 def render():
     return [
@@ -20,6 +22,11 @@ def render():
                 {
                     "key": "主页",
                     "label": "主页",
+                    "children": home.render(),
+                },
+                {
+                    "key": "地图",
+                    "label": "地图",
                     "children": home.render(),
                 },
                 {
@@ -36,11 +43,6 @@ def render():
                     "key": "时间",
                     "label": "时间",
                     "children": timeline.render(),
-                },
-                {
-                    "key": "参考",
-                    "label": "参考",
-                    "children": home.render(),
                 },
                 {
                     "key": "关于",
