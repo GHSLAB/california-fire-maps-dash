@@ -7,16 +7,14 @@ import feffery_leaflet_components as flc
 
 from feffery_dash_utils.style_utils import style
 
-from components import home, dashboard, imagery, timeline, about
-
-from maps import cal_fire
+from components import fire_maps, home, dashboard, imagery, timeline, about
 
 
 def render():
     return [
         fac.AntdTitle("Los Angeles Wildfire", level=4, style={"margin": "5px"}),
         fac.AntdTitle("Satellite Imagery Comparison", level=4, style={"margin": "5px"}),
-        # fac.AntdTitle("洛杉矶山火影像对比", level=4, style={"margin": "5px"}),
+        fac.AntdTitle("洛杉矶山火影像对比", level=4, style={"margin": "5px"}),
         fac.AntdTabs(
             items=[
                 {
@@ -27,7 +25,7 @@ def render():
                 {
                     "key": "地图",
                     "label": "地图",
-                    "children": home.render(),
+                    "children": fire_maps.render(),
                 },
                 {
                     "key": "数据",
@@ -50,6 +48,7 @@ def render():
                     "children": about.render(),
                 },
             ],
+            defaultActiveKey="地图",
             type="card",
             centered=True,
         ),
