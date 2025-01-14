@@ -1,6 +1,0 @@
-[app]
-title = "Cal-Fire Dashboard"
-
-
-[server]
-port = 3000

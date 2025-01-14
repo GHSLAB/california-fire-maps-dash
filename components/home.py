@@ -7,16 +7,18 @@ import feffery_leaflet_components as flc
 
 from feffery_dash_utils.style_utils import style
 
+from config import MapConfig
+
 
 def leaflet_render(center: tuple, zoom_level: int, height: str):
     return flc.LeafletMap(
         [
             flc.LeafletTileLayer(
-                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                url=MapConfig.arcgis_imagery,
                 zIndex=1,
             ),
             flc.LeafletTileLayer(
-                url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
+                url=MapConfig.labels,
                 zIndex=10,
             ),
         ],
