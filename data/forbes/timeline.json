@@ -1,5 +1,40 @@
 [
     {
+        "id": 70,
+        "time": "Tuesday, 4:00 a.m. PST",
+        "content": "The National Weather Service’s “particularly dangerous situation” red flag warning for parts of Los Angeles and Ventura counties is now in effect, and the agency’s LA office noted that while such warnings “do not predict fire starts, they do highlight an extremely dangerous environment that is favorable to very rapid fire growth if a fire does start.”"
+    },
+    {
+        "id": 69,
+        "time": "Tuesday, 12:15 a.m. PST",
+        "content": "Nearly 20,000 homes and businesses were without power early Tuesday in Ventura County as the area deals with the new Auto Fire, while the number of outages in Los Angeles County stands at 44,000, according to PowerOutages.US."
+    },
+    {
+        "id": 68,
+        "time": "Tuesday, 12:15 a.m. PST",
+        "content": "The Ventura County Fire Department announced that “forward progress on the Auto fire has been stopped” and the fire “was confined to the river bottom and no structures were threatened.”"
+    },
+    {
+        "id": 67,
+        "time": "Monday, 11:50 p.m. PST",
+        "content": "According to the Los Angeles Times, the Auto Fire received its name because of the large number of auto dealerships in the impacted area."
+    },
+    {
+        "id": 66,
+        "time": "Monday, 11:45 p.m. PST",
+        "content": "A new fire, called the Auto Fire, broke out late on Monday night in Ventura county and, according to Cal Fire’s latest update, has rapidly grown to cover 56 acres."
+    },
+    {
+        "id": 65,
+        "time": "Monday 9:00 p.m. PST",
+        "content": "The Los Angeles Department of Water and Power issued a warning that it may be forced to cut off power supply—with outages potentially lasting as long as 48 hours—in certain areas as a safety measure to prevent wildfires while the Red Flag Warning remains in effect until Friday."
+    },
+    {
+        "id": 64,
+        "time": "Monday 8:45 p.m. PST",
+        "content": "Los Angeles Mayor Karen Bass issued an executive order on Monday night, which aims to expedite the process of rebuilding homes in the impacted areas by requiring city officials to complete all building permitting reviews needed for reconstruction within 30 days of an application."
+    },
+    {
         "id": 63,
         "time": "Monday, 2:48 p.m. PST",
         "content": "California Gov. Gavin Newsom proposed $2.5 billion in additional funding for disaster response and recovery efforts in Los Angeles, adding that if the funding is approved by the legislature it will specifically go toward “recovery and cleanup, additional wildfire preparedness, and reopening schools shuttered by the fires.”"
@@ -306,17 +341,17 @@
     },
     {
         "id": 2,
-        "time": "Tuesday, 10:29 p.m. PST",
+        "time": "Jan. 7, 10:29 p.m. PST",
         "content": "The Hurst Fire ignited in the suburban area of Sylmar."
     },
     {
         "id": 1,
-        "time": "Tuesday, 5:30 p.m. PST",
+        "time": "Jan. 7, 5:30 p.m. PST",
         "content": "Newsom declared a state of emergency, urging residents to heed evacuation orders and saying, “This is a highly dangerous windstorm creating extreme fire risk, and we’re not out of the woods.”"
     },
     {
         "id": 0,
-        "time": "Tuesday, 10:30 a.m. PST",
+        "time": "Jan. 7, 10:30 a.m. PST",
         "content": "The Palisades Fire started in the Pacific Palisades neighborhood and resulted in about 30,000 people receiving evacuation orders as it initially spread to about 2,000 acres."
     }
 ]

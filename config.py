@@ -8,6 +8,11 @@ class AppConfig:
 class MapConfig:
     # 默认中心
     # california
-    cal_center: tuple = [34.198507, -118.179684]
+    deafult_center: tuple = [34.198507, -118.5]
     deafult_zoom: int = 8
-    cbs_bounds = [-118.702282, 34.030885, -118.013125, 34.4410175]
+    # map_bounds: dict = {
+    #     "minx": -119,  # 最小经度
+    #     "miny": 33.5,  # 最小纬度
+    #     "maxx": -118.0,  # 最大经度
+    #     "maxy": 35,  # 最大纬度
+    # }
