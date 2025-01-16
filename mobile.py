@@ -13,10 +13,8 @@ from components import home, fire_maps, dashboard, imagery, timeline, about
 def render():
     return [
         fac.AntdFlex(
-            fac.AntdTitle("2025 加州山火地图", level=4, style={"margin": "0px"}),
-            justify="center",
+            fac.AntdTitle("2025 加州山火地图", level=4, style={"margin": "0px"}), justify="center"
         ),
-        # # fac.AntdTitle("Satellite Imagery Comparison", level=4, style={"margin": "5px"}),
         fac.AntdFlex(
             fac.AntdTitle("California Fire Map", level=4, style={"margin": "0px"}), justify="center"
         ),
@@ -38,14 +36,14 @@ def render():
                     "children": dashboard.render(),
                 },
                 {
-                    "key": "画廊",
-                    "label": "画廊",
-                    "children": imagery.render(),
-                },
-                {
                     "key": "资讯",
                     "label": "资讯",
                     "children": timeline.render(),
+                },
+                {
+                    "key": "画廊",
+                    "label": "画廊",
+                    "children": imagery.render(),
                 },
                 {
                     "key": "关于",
@@ -53,7 +51,7 @@ def render():
                     "children": about.render(),
                 },
             ],
-            defaultActiveKey="主页",
+            defaultActiveKey="数据",
             # type="card",
             centered=True,
             # style={"marginTop": "5px"},

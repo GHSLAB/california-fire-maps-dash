@@ -15,18 +15,18 @@ import mobile
 app.layout = html.Div(
     [
         fuc.FefferyDeviceDetect(id="device-detect"),
-        html.Div(
+        html.Div(  # 页面渲染
             id="page-render",
             style={"margin": "10px"},
         ),
-        html.Div(
+        html.Div(  # 背景图片
             style={
                 "position": "fixed",
                 "top": "0",
                 "left": "0",
                 "width": "100%",
                 "height": "100%",
-                "backgroundImage": "url('/assets/background3.png')",
+                "backgroundImage": "url('/assets/background.png')",
                 "backgroundSize": "cover",  # 调整背景图片的大小
                 "backgroundRepeat": "no-repeat",  # 防止图片重复
                 "backgroundPosition": "center",  # 居中背景图片
@@ -35,10 +35,7 @@ app.layout = html.Div(
             }
         ),
     ],
-    style={
-        "width": "100%",
-        "height": "100vh",
-    },
+    style={"width": "100%", "height": "100vh"},
 )
 
 

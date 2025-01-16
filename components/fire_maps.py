@@ -25,9 +25,11 @@ def split_map_render():
                     fac.AntdRow(
                         flc.LeafletMap(
                             [
+                                Basemap.light_labels(),
                                 flc.LeafletTileLayer(
                                     url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
                                 ),
+                                Basemap.light_labels(),
                                 flc.LeafletMapSync(id="split-map1"),
                             ],
                             center={"lng": -118.46965, "lat": 34.04239},  # 34.04239/-118.46965
@@ -42,6 +44,7 @@ def split_map_render():
                     fac.AntdRow(
                         flc.LeafletMap(
                             [
+                                Basemap.light_labels(),
                                 flc.LeafletTileLayer(
                                     url="https://stormscdn.ngs.noaa.gov/20250114m-maxar/{z}/{x}/{y}",
                                     zIndex=99,
@@ -141,7 +144,6 @@ def render():
             [fac.AntdText("数据源: ArcGIS/MAXAR"), fac.AntdText("时间:2025-01-14")],
             justify="space-between",
             style=style(margin=3),
-            align="center",
         ),
         # fac.AntdFlex(
         #     [

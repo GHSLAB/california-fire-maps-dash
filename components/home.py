@@ -1,54 +1,27 @@
+# dash
 import dash
 from dash import html
 
 import feffery_antd_components as fac
-import feffery_utils_components as fuc
 import feffery_leaflet_components as flc
 from feffery_dash_utils.style_utils import style
+import feffery_antd_charts as fact
 
 from dash.dependencies import Input, Output, State
 
-import geopandas as gpd
-import json
 
 # 配置
 from config import MapConfig
+
+# 地图组件
 from maps.legend import Legend
 from maps.basemap import Basemap
 from maps import tile_selector, symbol_style
 
+# 数据
+from models.gpd_data import cbsdata, arcgisdata
 
-def read_json_file(file_path):
-    with open(file_path, "r") as file:
-        data = json.load(file)
-    return data
-
-
-def write_json_file(file_path, data):
-    with open(file_path, "w", encoding="utf-8") as file:
-        json.dump(data, file)
-
-
-## CBS 数据
-gdf_cbs_fire = gpd.GeoDataFrame.from_features(
-    read_json_file("./data/latest/cbs/latest_cali_fires.geojson")
-)
-gdf_cbs_evac = gpd.GeoDataFrame.from_features(
-    read_json_file("./data/latest/cbs/latest_cali_evac.geojson")
-)
-cbs_data_time = gdf_cbs_evac["timestamp"].max()
-
-
-# 将英亩转换为平方千米（1英亩约等于0.00404686平方千米）
-gdf_cbs_fire["acres_burned_km2"] = gdf_cbs_fire["acres_burned"] * 0.00404686
-
-# 更新tooltip列
-gdf_cbs_fire["tooltip"] = (
-    gdf_cbs_fire["fire_name"].astype(str)
-    + "损毁面积"
-    + gdf_cbs_fire["acres_burned_km2"].round(2).astype(str)
-    + "平方千米"
-)
+from components.dashboard import chart_style
 
 
 def render():
@@ -63,14 +36,12 @@ def render():
                             Basemap.light_labels(),
                             flc.LeafletLayerGroup(  # cbs_fire
                                 flc.LeafletGeoJSON(
-                                    # 使用json.loads()将gdf.to_json字符串转换为JSON格式
-                                    data=json.loads(gdf_cbs_fire.to_json()),
+                                    data=cbsdata.fire_gdf_to_json(),
                                     defaultStyle=symbol_style.cbs.Fire,
                                     fitBounds=False,
                                     showTooltip=True,
-                                    featureTooltipField="tooltip",
+                                    featureTooltipField="fire_name",
                                     hoverable=True,
-                                    tooltipDirection="center",
                                 ),
                                 id="cbs_fire",
                                 hidden=False,
@@ -78,12 +49,7 @@ def render():
                             ),
                             flc.LeafletLayerGroup(  # evac order
                                 flc.LeafletGeoJSON(
-                                    # 使用json.loads()将gdf.to_json字符串转换为JSON格式
-                                    data=json.loads(
-                                        gdf_cbs_evac[
-                                            gdf_cbs_evac["status"] == "Evacuation Order"
-                                        ].to_json()
-                                    ),
+                                    data=cbsdata.evac_order_gdf_to_json(),
                                     defaultStyle=symbol_style.cbs.Evacuation_Order,
                                     fitBounds=False,
                                     showTooltip=True,
@@ -91,17 +57,12 @@ def render():
                                     hoverable=True,
                                 ),
                                 id="cbs_evac_order",
-                                hidden=False,
+                                hidden=True,
                                 # zIndex=100,
                             ),
                             flc.LeafletLayerGroup(  # evac warning
                                 flc.LeafletGeoJSON(
-                                    # 使用json.loads()将gdf.to_json字符串转换为JSON格式
-                                    data=json.loads(
-                                        gdf_cbs_evac[
-                                            gdf_cbs_evac["status"] == "Evacuation Warning"
-                                        ].to_json()
-                                    ),
+                                    data=cbsdata.evac_warning_gdf_to_json(),
                                     defaultStyle=symbol_style.cbs.Evacuation_Warning,
                                     fitBounds=False,
                                     showTooltip=True,
@@ -109,7 +70,7 @@ def render():
                                     hoverable=True,
                                 ),
                                 id="cbs_evac_warning",
-                                hidden=False,
+                                hidden=True,
                                 # zIndex=50,
                             ),
                         ],
@@ -142,7 +103,7 @@ def render():
                         "数据时间",
                         style=style(fontWeight="bold"),
                     ),
-                    fac.AntdText(f"{cbs_data_time} PST", style=style(marginLeft="5px")),
+                    fac.AntdText(f"{cbsdata.evac_timestamp()} PST", style=style(marginLeft="5px")),
                     fac.AntdText(
                         "Source: CalFire",
                         style=style(position="absolute", right="5px", color="#8B8B8B"),
@@ -158,7 +119,7 @@ def render():
                                 "受灾情况",
                                 style=style(fontWeight="bold"),
                             ),
-                            fac.AntdCheckbox(id="burned_area_check", checked=False),
+                            fac.AntdCheckbox(id="burned_area_check", checked=True),
                             Legend.fill("烧毁区域", symbol_style.cbs.Fire["fillColor"]),
                             # Legend.fill("疏散警告", "#fd8724"),
                         ],
@@ -172,16 +133,16 @@ def render():
                             ),
                             fac.AntdCheckbox(
                                 id="cbs_evac_order_check",
-                                checked=True,
+                                checked=False,
                             ),
                             Legend.fill(
                                 "疏散命令",
                                 symbol_style.cbs.Evacuation_Order["fillColor"],
                             ),
-                            # fac.AntdCheckbox(
-                            #     id="cbs_evac_warning_check",
-                            #     checked=True,
-                            # ),
+                            fac.AntdCheckbox(
+                                id="cbs_evac_warning_check",
+                                checked=False,
+                            ),
                             Legend.fill(
                                 "疏散警告", symbol_style.cbs.Evacuation_Warning["fillColor"]
                             ),
@@ -190,8 +151,23 @@ def render():
                     ),
                 ],
                 direction="vertical",
+                # style=style(height="150px", width="100%"),
             ),
-            html.Div(style=style(height="150px", width="100%")),
+            fac.AntdTitle("火势控制进度", level=5),
+            html.Div(
+                fact.AntdBar(
+                    id="save_progress_chart",
+                    data=arcgisdata.save_progress_dict(),
+                    xField="火势控制进度",
+                    yField="区域",
+                    label={"position": "middle"},
+                    minBarWidth=20,
+                    maxBarWidth=25,
+                    height=250,
+                    style=style(padding="10px"),
+                ),
+                style=chart_style,
+            ),
         ],
     )
 
@@ -209,22 +185,22 @@ def cbs_fire_check(checked):
 
 
 @dash.callback(
-    [Output("cbs_evac_warning", "hidden"), Output("cbs_evac_order", "hidden")],
+    Output("cbs_evac_order", "hidden"),
     Input("cbs_evac_order_check", "checked"),
 )
 def cbs_evac_order_check(checked):
     if checked:
-        return [False, False]
+        return False
     else:
-        return [True, True]
+        return True
 
 
-# @dash.callback(
-#     Output("cbs_evac_warning", "hidden"),
-#     Input("cbs_evac_warning_check", "checked"),
-# )
-# def cbs_evac_warning_check(checked):
-#     if checked:
-#         return False
-#     else:
-#         return True
+@dash.callback(
+    Output("cbs_evac_warning", "hidden"),
+    Input("cbs_evac_warning_check", "checked"),
+)
+def cbs_evac_warning_check(checked):
+    if checked:
+        return False
+    else:
+        return True

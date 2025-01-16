@@ -12,30 +12,13 @@ import geopandas as gpd
 
 from server import app
 
-
-def read_json_file(file_path):
-    with open(file_path, "r") as file:
-        data = json.load(file)
-    return data
-
-
-## CBS 数据
-cbs_fire = read_json_file("./data/latest/cbs/latest_cali_fires.geojson")
-
-gdf_cbs_fire = gpd.GeoDataFrame.from_features(cbs_fire)
-gdf_cbs_fire["烧毁面积(km2)"] = round(gdf_cbs_fire["acres_burned"] * 0.00404686, 2)
-
-data = (
-    gdf_cbs_fire[["fire_name", "烧毁面积(km2)"]]
-    .sort_values(by="烧毁面积(km2)", ascending=False)
-    .to_dict("records")
-)
+from models.gpd_data import cbsdata, arcgisdata
 
 chart_style = {
     "backgroundColor": "rgba(240, 240, 240, 0.5)",
-    "border": "2px solid #ccc",
+    "border": "0px solid #ccc",
     "borderRadius": "10px",
-    "boxShadow": "0 5 10px rgba(0, 0, 0, 0.5)",
+    "boxShadow": "inset 0 0 5px rgba(0, 0, 0, 0.5)",
 }
 
 
@@ -44,8 +27,8 @@ def render():
         fac.AntdTitle("烧毁面积", level=5, style={"margin": "0px"}),
         html.Div(
             fact.AntdBar(
-                id="bar",
-                data=data,
+                id="burn-area",
+                data=cbsdata.burn_area_dict(),
                 xField="烧毁面积(km2)",
                 yField="fire_name",
                 label={"position": "right"},
@@ -56,47 +39,52 @@ def render():
             ),
             style=chart_style,
         ),
-        fac.AntdTitle("救灾投入", level=5, style={"margin": "0px"}),
+        fac.AntdTitle("救灾投入", level=5, style={"margin": "5px"}),
         html.Div(
-            fact.AntdBar(
-                id="bar",
-                data=data,
-                xField="烧毁面积(km2)",
-                yField="fire_name",
-                label={"position": "right"},
-                minBarWidth=20,
-                maxBarWidth=25,
-                height=250,
+            fact.AntdColumn(
+                id="save-resoucres",
+                data=arcgisdata.save_resoucres_dict(),
+                xField="类型",
+                yField="数量",
+                seriesField="名称",
+                label={"position": "top"},
+                isGroup=True,
+                minColumnWidth=25,
+                legend=True,
+                height=200,
                 style=style(padding="10px"),
             ),
             style=chart_style,
         ),
-        fac.AntdTitle("建筑损毁情况", level=5, style={"margin": "0px"}),
+        # fac.AntdTitle("建筑损毁情况", level=5, style={"margin": "0px"}),
+        # html.Div(
+        #     fact.AntdBar(
+        #         id="bar",
+        #         data=data,
+        #         xField="烧毁面积(km2)",
+        #         yField="fire_name",
+        #         label={"position": "right"},
+        #         minBarWidth=20,
+        #         maxBarWidth=25,
+        #         height=250,
+        #         style=style(padding="10px"),
+        #     ),
+        #     style=chart_style,
+        # ),
+        fac.AntdTitle("人员伤亡", level=5, style={"margin": "0px"}),
         html.Div(
-            fact.AntdBar(
-                id="bar",
-                data=data,
-                xField="烧毁面积(km2)",
-                yField="fire_name",
-                label={"position": "right"},
-                minBarWidth=20,
-                maxBarWidth=25,
-                height=250,
-                style=style(padding="10px"),
-            ),
-            style=chart_style,
-        ),
-        fac.AntdTitle("人员伤亡情况", level=5, style={"margin": "0px"}),
-        html.Div(
-            fact.AntdBar(
-                id="bar",
-                data=data,
-                xField="烧毁面积(km2)",
-                yField="fire_name",
-                label={"position": "right"},
-                minBarWidth=20,
-                maxBarWidth=25,
-                height=250,
+            fact.AntdColumn(
+                id="casualties",
+                data=arcgisdata.casualties_dict(),
+                xField="类型",
+                yField="数量",
+                seriesField="名称",
+                label={"position": "middle"},
+                isGroup=True,
+                minColumnWidth=15,
+                maxColumnWidth=30,
+                legend=True,
+                height=200,
                 style=style(padding="10px"),
             ),
             style=chart_style,
