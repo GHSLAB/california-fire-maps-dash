@@ -100,14 +100,14 @@ def render():
         fac.AntdFlex(
             [
                 fac.AntdTitle("新闻影像", level=4, style=style(marginTop="5px")),
-                fac.AntdSelect(
-                    id="location-select",
-                    options=[
-                        {"label": "Palisades 地区", "value": "Palisades"},
-                        {"label": "Eaton 地区", "value": "Eaton"},
-                        {"label": "损毁建筑", "value": "damage"},
-                    ],
-                ),
+                # fac.AntdSelect(
+                #     id="gallery-selector",
+                #     options=[
+                #         {"label": "Palisades", "value": "Palisades"},
+                #         {"label": "Eaton", "value": "Eaton"},
+                #         {"label": "损毁建筑", "value": "damage"},
+                #     ],
+                # ),
                 html.Div(
                     id="imagery-container",
                     style={"width": "100%", "padding": "5px", "marginTop": "5px"},
@@ -118,13 +118,13 @@ def render():
     ]
 
 
-@app.callback(Output("imagery-container", "children"), Input("location-select", "value"))
-def update_imagery(location):
-    if location == "Eaton":
-        return eaton_img()
-    elif location == "Palisades":
-        return palisades_img()
-    elif location == "damage":
-        return damage_img()
-    else:
-        return []
+# @app.callback(Output("imagery-container", "children"), Input("gallery-selector", "value"))
+# def update_imagery(location):
+#     if location == "Eaton":
+#         return eaton_img()
+#     elif location == "Palisades":
+#         return palisades_img()
+#     elif location == "damage":
+#         return damage_img()
+#     else:
+#         return []

@@ -115,22 +115,12 @@ def render():
                 [
                     fac.AntdSpace(
                         [
-                            fac.AntdText(
-                                "受灾情况",
-                                style=style(fontWeight="bold"),
-                            ),
+                            # fac.AntdText(
+                            #     "受灾情况",
+                            #     style=style(fontWeight="bold"),
+                            # ),
                             fac.AntdCheckbox(id="burned_area_check", checked=True),
                             Legend.fill("烧毁区域", symbol_style.cbs.Fire["fillColor"]),
-                            # Legend.fill("疏散警告", "#fd8724"),
-                        ],
-                        style=style(marginTop="5px"),
-                    ),
-                    fac.AntdSpace(
-                        [
-                            fac.AntdText(
-                                "疏散情况",
-                                style=style(fontWeight="bold"),
-                            ),
                             fac.AntdCheckbox(
                                 id="cbs_evac_order_check",
                                 checked=False,
@@ -147,8 +137,32 @@ def render():
                                 "疏散警告", symbol_style.cbs.Evacuation_Warning["fillColor"]
                             ),
                         ],
-                        direction="horizontal",
+                        style=style(marginTop="5px"),
                     ),
+                    # fac.AntdSpace(
+                    #     [
+                    #         fac.AntdText(
+                    #             "疏散情况",
+                    #             style=style(fontWeight="bold"),
+                    #         ),
+                    #         # fac.AntdCheckbox(
+                    #         #     id="cbs_evac_order_check",
+                    #         #     checked=False,
+                    #         # ),
+                    #         # Legend.fill(
+                    #         #     "疏散命令",
+                    #         #     symbol_style.cbs.Evacuation_Order["fillColor"],
+                    #         # ),
+                    #         # fac.AntdCheckbox(
+                    #         #     id="cbs_evac_warning_check",
+                    #         #     checked=False,
+                    #         # ),
+                    #         # Legend.fill(
+                    #         #     "疏散警告", symbol_style.cbs.Evacuation_Warning["fillColor"]
+                    #         # ),
+                    #     ],
+                    #     direction="horizontal",
+                    # ),
                 ],
                 direction="vertical",
                 # style=style(height="150px", width="100%"),

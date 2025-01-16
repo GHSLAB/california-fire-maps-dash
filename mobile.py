@@ -53,7 +53,7 @@ def render():
             ],
             defaultActiveKey="数据",
             # type="card",
-            centered=True,
+            # centered=True,
             # style={"marginTop": "5px"},
         ),
     ]
