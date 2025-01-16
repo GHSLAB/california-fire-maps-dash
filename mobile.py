@@ -12,9 +12,14 @@ from components import home, fire_maps, dashboard, imagery, timeline, about
 
 def render():
     return [
-        fac.AntdTitle("2025 California Fire Map", level=4, style={"margin": "5px"}),
+        fac.AntdFlex(
+            fac.AntdTitle("2025 加州山火地图", level=4, style={"margin": "0px"}),
+            justify="center",
+        ),
         # # fac.AntdTitle("Satellite Imagery Comparison", level=4, style={"margin": "5px"}),
-        fac.AntdTitle("加州山火地图", level=4, style={"margin": "5px"}),
+        fac.AntdFlex(
+            fac.AntdTitle("California Fire Map", level=4, style={"margin": "0px"}), justify="center"
+        ),
         fac.AntdTabs(
             items=[
                 {
@@ -48,9 +53,9 @@ def render():
                     "children": about.render(),
                 },
             ],
-            defaultActiveKey="地图",
+            defaultActiveKey="主页",
             # type="card",
             centered=True,
-            style={"marginTop": "15px"},
+            # style={"marginTop": "5px"},
         ),
     ]

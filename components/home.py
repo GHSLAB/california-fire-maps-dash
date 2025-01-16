@@ -15,7 +15,7 @@ import json
 from config import MapConfig
 from maps.legend import Legend
 from maps.basemap import Basemap
-from maps import tile_selector
+from maps import tile_selector, symbol_style
 
 
 def read_json_file(file_path):
@@ -50,28 +50,6 @@ gdf_cbs_fire["tooltip"] = (
     + "平方千米"
 )
 
-cbs_style = {
-    "Fire": {
-        "color": "black",
-        "weight": 1,
-        "dashArray": "5, 2, 5",
-        "fillOpacity": 0.2,
-        "fillColor": "#DDDDDD",
-    },
-    "Evacuation Warning": {
-        "color": "#fd8724",
-        "fillColor": "#fd8724",
-        "fillOpacity": 0.2,
-        "weight": 2,
-    },
-    "Evacuation Order": {
-        "color": "#820415",
-        "fillColor": "#820415",
-        "fillOpacity": 0.2,
-        "weight": 2,
-    },
-}
-
 
 def render():
     return html.Div(
@@ -87,7 +65,7 @@ def render():
                                 flc.LeafletGeoJSON(
                                     # 使用json.loads()将gdf.to_json字符串转换为JSON格式
                                     data=json.loads(gdf_cbs_fire.to_json()),
-                                    defaultStyle=cbs_style["Fire"],
+                                    defaultStyle=symbol_style.cbs.Fire,
                                     fitBounds=False,
                                     showTooltip=True,
                                     featureTooltipField="tooltip",
@@ -106,7 +84,7 @@ def render():
                                             gdf_cbs_evac["status"] == "Evacuation Order"
                                         ].to_json()
                                     ),
-                                    defaultStyle=cbs_style["Evacuation Order"],
+                                    defaultStyle=symbol_style.cbs.Evacuation_Order,
                                     fitBounds=False,
                                     showTooltip=True,
                                     featureTooltipField="status",
@@ -124,7 +102,7 @@ def render():
                                             gdf_cbs_evac["status"] == "Evacuation Warning"
                                         ].to_json()
                                     ),
-                                    defaultStyle=cbs_style["Evacuation Warning"],
+                                    defaultStyle=symbol_style.cbs.Evacuation_Warning,
                                     fitBounds=False,
                                     showTooltip=True,
                                     featureTooltipField="status",
@@ -181,7 +159,7 @@ def render():
                                 style=style(fontWeight="bold"),
                             ),
                             fac.AntdCheckbox(id="burned_area_check", checked=False),
-                            Legend.fill("烧毁区域", cbs_style["Fire"]["fillColor"]),
+                            Legend.fill("烧毁区域", symbol_style.cbs.Fire["fillColor"]),
                             # Legend.fill("疏散警告", "#fd8724"),
                         ],
                         style=style(marginTop="5px"),
@@ -196,12 +174,17 @@ def render():
                                 id="cbs_evac_order_check",
                                 checked=True,
                             ),
-                            Legend.fill("疏散命令", cbs_style["Evacuation Order"]["fillColor"]),
+                            Legend.fill(
+                                "疏散命令",
+                                symbol_style.cbs.Evacuation_Order["fillColor"],
+                            ),
                             # fac.AntdCheckbox(
                             #     id="cbs_evac_warning_check",
                             #     checked=True,
                             # ),
-                            Legend.fill("疏散警告", cbs_style["Evacuation Warning"]["fillColor"]),
+                            Legend.fill(
+                                "疏散警告", symbol_style.cbs.Evacuation_Warning["fillColor"]
+                            ),
                         ],
                         direction="horizontal",
                     ),

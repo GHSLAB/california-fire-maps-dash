@@ -41,7 +41,52 @@ chart_style = {
 
 def render():
     return [
-        fac.AntdTitle("烧毁面积", level=5, className="subtitle"),
+        fac.AntdTitle("烧毁面积", level=5, style={"margin": "0px"}),
+        html.Div(
+            fact.AntdBar(
+                id="bar",
+                data=data,
+                xField="烧毁面积(km2)",
+                yField="fire_name",
+                label={"position": "right"},
+                minBarWidth=20,
+                maxBarWidth=25,
+                height=250,
+                style=style(padding="10px"),
+            ),
+            style=chart_style,
+        ),
+        fac.AntdTitle("救灾投入", level=5, style={"margin": "0px"}),
+        html.Div(
+            fact.AntdBar(
+                id="bar",
+                data=data,
+                xField="烧毁面积(km2)",
+                yField="fire_name",
+                label={"position": "right"},
+                minBarWidth=20,
+                maxBarWidth=25,
+                height=250,
+                style=style(padding="10px"),
+            ),
+            style=chart_style,
+        ),
+        fac.AntdTitle("建筑损毁情况", level=5, style={"margin": "0px"}),
+        html.Div(
+            fact.AntdBar(
+                id="bar",
+                data=data,
+                xField="烧毁面积(km2)",
+                yField="fire_name",
+                label={"position": "right"},
+                minBarWidth=20,
+                maxBarWidth=25,
+                height=250,
+                style=style(padding="10px"),
+            ),
+            style=chart_style,
+        ),
+        fac.AntdTitle("人员伤亡情况", level=5, style={"margin": "0px"}),
         html.Div(
             fact.AntdBar(
                 id="bar",

@@ -17,41 +17,6 @@ from config import MapConfig
 from server import app
 
 
-def read_json_file(file_path):
-    with open(file_path, "r") as file:
-        data = json.load(file)
-    return data
-
-
-gdf_cbs_fire = gpd.GeoDataFrame.from_features(
-    read_json_file("./data/latest/cbs/latest_cali_fires.geojson")
-)
-
-## CBS 数据
-cbs_fire = read_json_file("./data/latest/cbs/latest_cali_fires.geojson")
-cbs_style = {
-    "Fire": {
-        "color": "black",
-        "weight": 2,
-        "dashArray": "5, 2, 5",
-        "fillOpacity": 0.4,
-        "fillColor": "#DDDDDD",
-    },
-    "Evacuation Warning": {
-        "color": "#fd8724",
-        "fillColor": "#fd8724",
-        "fillOpacity": 0.2,
-        "weight": 1,
-    },
-    "Evacuation Order": {
-        "color": "#820415",
-        "fillColor": "#820415",
-        "fillOpacity": 0.2,
-        "weight": 1,
-    },
-}
-
-
 def split_map_render():
     return [
         flc.LeafletMapProvider(
@@ -138,7 +103,7 @@ def rolling_map_render():
                     zoom=12,
                     style={"height": 600},
                 ),
-                style={"zIndex": 99999999},
+                style={"zIndex": 999},
             )
         ),
     ]

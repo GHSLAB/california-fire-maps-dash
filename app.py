@@ -17,7 +17,7 @@ app.layout = html.Div(
         fuc.FefferyDeviceDetect(id="device-detect"),
         html.Div(
             id="page-render",
-            style={"margin": "15px"},
+            style={"margin": "10px"},
         ),
         html.Div(
             style={
