@@ -1,9 +1,4 @@
-import json
-
 import requests
-
-basic_geojson = requests.get("https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json").json()
-
-file = "./data/cbs/"
-
-json = json.loads()
+from bs4 import BeautifulSoup
+import datetime
+import json

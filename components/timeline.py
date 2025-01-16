@@ -40,11 +40,20 @@ def get_json_config(timeline_file: str, column: str) -> str:
 
 
 # timeline
-timeline = get_timeline_item("./data/forbes/timeline.json")
-update_time = get_json_config("./data/forbes/update_time.json", "Last updated")
+def timeline():
+    return get_timeline_item("./data/forbes/timeline.json")
 
-timeline_cn = get_timeline_item("./data/forbes/timeline_cn.json")
-translate_time = get_json_config("./data/forbes/translate_time.json", "Last updated")
+
+def update_time():
+    return get_json_config("./data/forbes/update_time.json", "Last updated")
+
+
+def timeline_cn():
+    return get_timeline_item("./data/forbes/timeline_cn.json")
+
+
+def translate_time():
+    return get_json_config("./data/forbes/translate_time.json", "Last updated")
 
 
 def render():
@@ -52,22 +61,28 @@ def render():
         html.Div(id="refresh-status"),
         html.Div(
             [
-                dcc.Store(id="timeline-data"),
                 fac.AntdSpace(
                     fac.AntdFlex(
                         [
+                            # fac.AntdButton(
+                            #     "重载",
+                            #     id="reload",
+                            #     disabled=False,
+                            #     type="primary",
+                            # ),
                             fac.AntdButton(
                                 "翻转",
                                 id="switch-timeline",
                                 disabled=False,
                                 type="primary",
+                                style=style(marginLeft="5px"),
                             ),
                             fac.AntdTooltip(
                                 fac.AntdButton(
                                     "实时数据",
                                     id="update-timeline",
-                                    disabled=False,
-                                    style=style(marginLeft="10px"),
+                                    disabled=True,
+                                    style=style(marginLeft="5px"),
                                 ),
                                 title="抓取实时数据, 请等待",
                             ),
@@ -93,7 +108,7 @@ def render():
                         # fac.AntdSpin(fac.AntdText(id="spin-refresh"), text="数据获取中"),
                         fac.AntdSpace(
                             fac.AntdTimeline(
-                                id="timeline", pending="NOW", items=timeline, reverse=True
+                                id="timeline", pending="NOW", items=timeline(), reverse=True
                             )
                         ),
                     ],
@@ -103,7 +118,7 @@ def render():
                         "maxHeight": "calc(100vh - 300px)",
                         "overflowY": "auto",
                         "position": "relative",
-                        "backgroundColor": "rgba(240, 240, 240, 0.8)",
+                        "backgroundColor": "rgba(240, 240, 240, 0.5)",
                         "borderRadius": "5px",
                         "boxShadow": "0 0 10px rgba(0, 0, 0, 0.3)",
                         "border": "1px solid #f0f0f0",
@@ -118,7 +133,7 @@ def render():
                 fac.AntdFlex(
                     [
                         fac.AntdText(
-                            f"更新时间: {update_time}",
+                            f"更新时间: {update_time()}",
                             id="update-time",
                             style=style(marginLeft="5px"),
                         ),
@@ -137,6 +152,9 @@ def render():
 
 
 # 回调
+
+
+# 切换方向
 @app.callback(
     Output("timeline", "reverse", allow_duplicate=True),
     Input("switch-timeline", "nClicks"),
@@ -200,6 +218,6 @@ def switch_language(nClicks):
         # 计算nClicks是否为单数
         is_odd = nClicks % 2 != 0
         if is_odd:
-            return [timeline_cn, f"翻译时间: {translate_time}"]
+            return [timeline_cn(), f"翻译时间: {translate_time()}"]
         else:
-            return [timeline, f"更新时间: {update_time}"]
+            return [timeline(), f"更新时间: {update_time()}"]

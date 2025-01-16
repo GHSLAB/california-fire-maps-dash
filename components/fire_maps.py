@@ -6,16 +6,15 @@ import feffery_utils_components as fuc
 import feffery_leaflet_components as flc
 from feffery_dash_utils.style_utils import style
 
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output, State, ALL, MATCH
 
 import geopandas as gpd
 import json
 
-# 配置
-from config import MapConfig
-from maps.legend import Legend
 from maps.basemap import Basemap
-from maps import tile_selector
+
+from config import MapConfig
+from server import app
 
 
 def read_json_file(file_path):
@@ -24,31 +23,12 @@ def read_json_file(file_path):
     return data
 
 
-def write_json_file(file_path, data):
-    with open(file_path, "w", encoding="utf-8") as file:
-        json.dump(data, file)
-
+gdf_cbs_fire = gpd.GeoDataFrame.from_features(
+    read_json_file("./data/latest/cbs/latest_cali_fires.geojson")
+)
 
 ## CBS 数据
 cbs_fire = read_json_file("./data/latest/cbs/latest_cali_fires.geojson")
-cbs_evac = read_json_file("./data/latest/cbs/latest_cali_evac.geojson")
-
-gdf_cbs_evac = gpd.GeoDataFrame.from_features(cbs_evac)
-cbs_data_time = gdf_cbs_evac["timestamp"].max()
-
-gdf_cbs_fire = gpd.GeoDataFrame.from_features(cbs_fire)
-
-# 将英亩转换为平方千米（1英亩约等于0.00404686平方千米）
-gdf_cbs_fire["acres_burned_km2"] = gdf_cbs_fire["acres_burned"] * 0.00404686
-
-# 更新tooltip列
-gdf_cbs_fire["tooltip"] = (
-    gdf_cbs_fire["fire_name"].astype(str)
-    + "损毁面积"
-    + gdf_cbs_fire["acres_burned_km2"].round(2).astype(str)
-    + "平方千米"
-)
-
 cbs_style = {
     "Fire": {
         "color": "black",
@@ -72,168 +52,215 @@ cbs_style = {
 }
 
 
-def render():
-    return html.Div(
-        [
-            html.Div(
+def split_map_render():
+    return [
+        flc.LeafletMapProvider(
+            fac.AntdCol(
                 [
-                    flc.LeafletMap(
-                        [
-                            # Basemap.arcgis_img(),
-                            flc.LeafletTileLayer(id="tile-layer", zIndex=1, opacity=0.8),
-                            Basemap.light_labels(),
-                            # flc.LeafletLayerGroup(
-                            #     flc.LeafletCircleMarker(center={"lng": -118.5, "lat": 34.198507}),
-                            #     id="cbs_fire_marker",
-                            # ),
-                            flc.LeafletLayerGroup(  # cbs_fire
-                                flc.LeafletGeoJSON(
-                                    # 使用json.loads()将gdf.to_json字符串转换为JSON格式
-                                    data=json.loads(gdf_cbs_fire.to_json()),
-                                    defaultStyle=cbs_style["Fire"],
-                                    fitBounds=False,
-                                    showTooltip=True,
-                                    featureTooltipField="tooltip",
-                                    hoverable=True,
-                                    tooltipDirection="center",
+                    fac.AntdRow(
+                        flc.LeafletMap(
+                            [
+                                flc.LeafletTileLayer(
+                                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
                                 ),
-                                id="cbs_fire",
-                                hidden=False,
-                                zIndex=100,
+                                flc.LeafletMapSync(id="split-map1"),
+                            ],
+                            center={"lng": -118.46965, "lat": 34.04239},  # 34.04239/-118.46965
+                            zoom=12,
+                            style=style(
+                                height=299,
+                                width="100%",
+                                # borderbottom="2px solid white;",
                             ),
-                            flc.LeafletLayerGroup(  # evac order
-                                flc.LeafletGeoJSON(
-                                    # 使用json.loads()将gdf.to_json字符串转换为JSON格式
-                                    data=json.loads(
-                                        gdf_cbs_evac[
-                                            gdf_cbs_evac["status"] == "Evacuation Order"
-                                        ].to_json()
-                                    ),
-                                    defaultStyle=cbs_style["Evacuation Order"],
-                                    fitBounds=False,
-                                    showTooltip=True,
-                                    featureTooltipField="status",
-                                    hoverable=True,
-                                ),
-                                id="cbs_evac_order",
-                                hidden=False,
-                                zIndex=100,
-                            ),
-                            flc.LeafletLayerGroup(  # evac warning
-                                flc.LeafletGeoJSON(
-                                    # 使用json.loads()将gdf.to_json字符串转换为JSON格式
-                                    data=json.loads(
-                                        gdf_cbs_evac[
-                                            gdf_cbs_evac["status"] == "Evacuation Warning"
-                                        ].to_json()
-                                    ),
-                                    defaultStyle=cbs_style["Evacuation Warning"],
-                                    fitBounds=False,
-                                    showTooltip=True,
-                                    featureTooltipField="status",
-                                    hoverable=True,
-                                ),
-                                id="cbs_evac_warning",
-                                hidden=False,
-                                zIndex=50,
-                            ),
-                            flc.LeafletLayerGroup(),
-                        ],
-                        center=MapConfig.deafult_center,
-                        zoom=9,
-                        showMeasurements=True,
-                        measureControl=True,
-                        scaleControl=True,
-                        style=style(height="400px", width="100%"),
-                    ),
-                    flc.LeafletTileSelect(  # 底图切换器
-                        id="tile-select",
-                        # 默认底图
-                        selectedUrl=tile_selector.basemap[0]["url"],
-                        # 底图url
-                        urls=tile_selector.basemap,
-                        containerVisible=False,
-                        # 缩略图参数
-                        center=MapConfig.deafult_center,
-                        zoom=7,
-                        style=style(
-                            maxWidth="80%",
                         ),
                     ),
-                ]
-            ),
-            fac.AntdFlex(
-                [
-                    fac.AntdText(
-                        "数据时间",
-                        style=style(fontWeight="bold"),
-                    ),
-                    fac.AntdText(f"{cbs_data_time} PST", style=style(marginLeft="5px")),
-                    fac.AntdText(
-                        "Source: CalFire",
-                        style=style(position="absolute", right="5px", color="#8B8B8B"),
-                    ),
-                ],
-                vertical=False,
-            ),
-            fac.AntdSpace(
-                [
-                    fac.AntdSpace(
-                        [
-                            fac.AntdText(
-                                "受灾情况",
-                                style=style(fontWeight="bold"),
+                    fac.AntdRow(
+                        flc.LeafletMap(
+                            [
+                                flc.LeafletTileLayer(
+                                    url="https://stormscdn.ngs.noaa.gov/20250114m-maxar/{z}/{x}/{y}",
+                                    zIndex=99,
+                                ),
+                                flc.LeafletTileLayer(
+                                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                                    zIndex=1,
+                                    opacity=0.5,
+                                ),
+                                flc.LeafletMapSync(id="split-map2"),
+                            ],
+                            center={"lng": -118.46965, "lat": 34.04239},  # 34.04239/-118.46965
+                            zoom=12,
+                            zoomControl=False,
+                            style=style(
+                                height=299,
+                                width="100%",
+                                marginTop="2px",
+                                # borderTop="1px solid white;",
                             ),
-                            fac.AntdCheckbox(id="burned_area_check", checked=False),
-                            Legend.fill("烧毁区域", cbs_style["Fire"]["fillColor"]),
-                            # Legend.fill("疏散警告", "#fd8724"),
-                        ],
-                        style=style(marginTop="5px"),
-                    ),
-                    fac.AntdSpace(
-                        [
-                            fac.AntdText(
-                                "疏散情况",
-                                style=style(fontWeight="bold"),
-                            ),
-                            fac.AntdCheckbox(
-                                id="cbs_evac_order_check",
-                                checked=True,
-                            ),
-                            Legend.fill("疏散命令", cbs_style["Evacuation Order"]["fillColor"]),
-                            fac.AntdCheckbox(
-                                id="cbs_evac_warning_check",
-                                checked=True,
-                            ),
-                            Legend.fill("疏散警告", cbs_style["Evacuation Warning"]["fillColor"]),
-                        ],
-                        direction="horizontal",
+                        ),
                     ),
                 ],
-                direction="vertical",
-            ),
-        ],
-    )
+                style={"height": 600, "width": "100%"},
+            )
+        )
+    ]
 
 
-# 图层控制
-@dash.callback(
-    Output("cbs_evac_order", "hidden"),
-    Input("cbs_evac_order_check", "checked"),
+def rolling_map_render():
+    return [
+        flc.LeafletMapProvider(
+            fuc.FefferyCompareSlider(
+                firstItem=flc.LeafletMap(
+                    [
+                        flc.LeafletTileLayer(
+                            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                        ),
+                        flc.LeafletMapSync(id="split-map1"),
+                    ],
+                    center={"lng": -118.46965, "lat": 34.04239},  # 34.04239/-118.46965
+                    zoom=12,
+                    style={"height": 600},
+                ),
+                secondItem=flc.LeafletMap(
+                    [
+                        flc.LeafletTileLayer(
+                            url="https://stormscdn.ngs.noaa.gov/20250114m-maxar/{z}/{x}/{y}",
+                            zIndex=99,
+                        ),
+                        flc.LeafletTileLayer(
+                            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                            zIndex=1,
+                            opacity=0.5,
+                        ),
+                        flc.LeafletMapSync(id="split-map2"),
+                    ],
+                    center={"lng": -118.46965, "lat": 34.04239},
+                    zoom=12,
+                    style={"height": 600},
+                ),
+                style={"zIndex": 99999999},
+            )
+        ),
+    ]
+
+
+#
+maxar_time = ["2025-01-08", "2025-01-09", "2025-01-10", "2025-01-13", "2025-01-14"]
+maxar_date = ["01-08", "01-09", "01-10", "01-13", "01-14"]
+
+
+# 主页面
+def render():
+    return [
+        fuc.FefferyStyle(  # 提升卷帘拖拽条z-index
+            rawStyle="""
+[data-rcs="handle-container"] {
+    z-index: 500;
+}
+"""
+        ),
+        fac.AntdSpace(
+            [
+                fac.AntdButton("卷帘模式", type="primary", id="rolling-mode"),
+                fac.AntdButton("分屏模式", id="split-mode"),
+                fac.AntdText("切片服务加载较慢", style=style(position="absolute", right="5px")),
+            ],
+            direction="horizontal",
+        ),
+        html.Div(
+            rolling_map_render(),
+            id="map-container",
+            style=style(marginTop=10, borderRadius=15),
+        ),
+        fac.AntdFlex(
+            [fac.AntdText("数据源: ArcGIS/MAXAR"), fac.AntdText("时间:2025-01-14")],
+            justify="space-between",
+            style=style(margin=3),
+            align="center",
+        ),
+        # fac.AntdFlex(
+        #     [
+        #         fac.AntdButton(
+        #             f"{date}",
+        #             id={"type": "button", "index": date},
+        #             type="primary" if date == "01-14" else "default",
+        #         )
+        #         for date in maxar_date
+        #     ],
+        #     vertical=False,
+        #     justify="space-around",
+        #     style=style(marginTop=10),
+        # ),
+        # fac.AntdSteps(
+        #     steps=[
+        #         {
+        #             "title": f"步骤{i + 1}",
+        #         }
+        #         for i in range(5)
+        #     ],
+        #     labelPlacement="vertical",
+        # ),
+        # fac.AntdSegmented(
+        #     options=[
+        #         {"label": "01-14", "value": "0114"},
+        #         {"label": "01-13", "value": "0113"},
+        #         {"label": "01-10", "value": "0110"},
+        #         {"label": "01-09", "value": "0109"},
+        #         {"label": "01-08", "value": "0108"},
+        #     ],
+        #     size="large",
+        #     defaultValue="0114",
+        # ),
+    ]
+
+
+@app.callback(
+    [
+        Output("split-mode", "type", allow_duplicate=True),
+        Output("rolling-mode", "type", allow_duplicate=True),
+        Output("map-container", "children", allow_duplicate=True),
+    ],
+    Input("split-mode", "nClicks"),
+    prevent_initial_call=True,
 )
-def cbs_evac_order_check(checked):
-    if checked:
-        return False
-    else:
-        return True
+def split_mode(nClicks):
+    if nClicks:
+        return ["primary", "default", split_map_render()]
 
 
-@dash.callback(
-    Output("cbs_evac_warning", "hidden"),
-    Input("cbs_evac_warning_check", "checked"),
+@app.callback(
+    [
+        Output("split-mode", "type", allow_duplicate=True),
+        Output("rolling-mode", "type", allow_duplicate=True),
+        Output("map-container", "children", allow_duplicate=True),
+    ],
+    Input("rolling-mode", "nClicks"),
+    prevent_initial_call=True,
 )
-def cbs_evac_warning_check(checked):
-    if checked:
-        return False
-    else:
-        return True
+def rolling_mode(nClicks):
+    if nClicks:
+        return ["default", "primary", rolling_map_render()]
+
+    # return [
+    #     fuc.FefferyCompareSlider(
+    #         firstItem=flc.LeafletMap(
+    #             [Basemap.arcgis_imgery()],
+    #             center=MapConfig.deafult_center,
+    #             zoom=12,
+    #             zoomControl=False,
+    #             style={"width": 800, "height": 500},
+    #         ),
+    #         secondItem=flc.LeafletMap(
+    #             [
+    #                 flc.LeafletTileLayer(
+    #                     url="https://stormscdn.ngs.noaa.gov/20250114m-maxar/{z}/{x}/{y}"
+    #                 )
+    #             ],
+    #             center=MapConfig.deafult_center,
+    #             zoom=12,
+    #             zoomControl=False,
+    #             style={"width": 800, "height": 500},
+    #         ),
+    #         style={"width": 800, "height": 500},
+    #     ),
+    # ]

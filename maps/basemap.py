@@ -6,13 +6,13 @@ from feffery_dash_utils.style_utils import style
 
 
 class Basemap:
-    arcgis_imagery = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+    arcgis_imagery_url = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
     light_only_labels = "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"
 
     # 定义图例填充颜色
     @classmethod
-    def arcgis_img(cls):
-        return flc.LeafletTileLayer(url=cls.arcgis_imagery, zIndex=1)
+    def arcgis_imgery(cls):
+        return flc.LeafletTileLayer(url=cls.arcgis_imagery_url, zIndex=1)
 
     @classmethod
     def light_labels(cls):

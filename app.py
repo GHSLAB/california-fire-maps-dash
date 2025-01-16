@@ -19,14 +19,25 @@ app.layout = html.Div(
             id="page-render",
             style={"margin": "15px"},
         ),
+        html.Div(
+            style={
+                "position": "fixed",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "backgroundImage": "url('/assets/background3.png')",
+                "backgroundSize": "cover",  # 调整背景图片的大小
+                "backgroundRepeat": "no-repeat",  # 防止图片重复
+                "backgroundPosition": "center",  # 居中背景图片
+                "opacity": "0.2",
+                "zIndex": "-1",
+            }
+        ),
     ],
     style={
         "width": "100%",
         "height": "100vh",
-        "backgroundImage": "url('/assets/background2.png')",
-        "backgroundSize": "cover",  # 调整背景图片的大小
-        "backgroundRepeat": "no-repeat",  # 防止图片重复
-        "backgroundPosition": "center",  # 居中背景图片
     },
 )
 

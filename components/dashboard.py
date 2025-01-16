@@ -32,15 +32,16 @@ data = (
 )
 
 chart_style = {
-    "backgroundColor": "rgba(240, 240, 240, 0.9)",
-    "borderRadius": "5px",
-    "boxShadow": "0 0 10px rgba(0, 0, 0, 0.5)",
+    "backgroundColor": "rgba(240, 240, 240, 0.5)",
+    "border": "2px solid #ccc",
+    "borderRadius": "10px",
+    "boxShadow": "0 5 10px rgba(0, 0, 0, 0.5)",
 }
 
 
 def render():
     return [
-        fac.AntdTitle("烧毁面积", level=5),
+        fac.AntdTitle("烧毁面积", level=5, className="subtitle"),
         html.Div(
             fact.AntdBar(
                 id="bar",
@@ -51,7 +52,6 @@ def render():
                 minBarWidth=20,
                 maxBarWidth=25,
                 height=250,
-                # theme="dark",
                 style=style(padding="10px"),
             ),
             style=chart_style,
