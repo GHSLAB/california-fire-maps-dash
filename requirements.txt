@@ -6,3 +6,4 @@ feffery_leaflet_components==0.1.0rc7
 feffery_utils_components==0.2.0rc25
 geopandas==1.0.1
 pandas==2.2.3
+flask-compress
