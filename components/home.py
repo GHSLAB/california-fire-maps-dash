@@ -76,7 +76,7 @@ def render():
                         showMeasurements=True,
                         measureControl=True,
                         scaleControl=True,
-                        style=style(height="400px", width="100%"),
+                        style=style(height="35vh", width="100%"),
                     ),
                     flc.LeafletTileSelect(  # 底图切换器
                         id="tile-select",
@@ -89,7 +89,7 @@ def render():
                         center=MapConfig.deafult_center,
                         zoom=7,
                         style=style(
-                            maxWidth="80%",
+                            maxWidth="60%",
                         ),
                     ),
                 ]
@@ -130,7 +130,7 @@ def render():
                                 "疏散警告", symbol_style.cbs.Evacuation_Warning["fillColor"]
                             ),
                         ],
-                        style=style(marginTop="5px"),
+                        style=style(marginTop="10px"),
                     ),
                 ],
                 direction="vertical",

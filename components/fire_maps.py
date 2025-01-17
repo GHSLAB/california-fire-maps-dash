@@ -36,7 +36,7 @@ def split_map_render():
                             center={"lng": -118.46965, "lat": 34.04239},  # 34.04239/-118.46965
                             zoom=10,
                             style=style(
-                                height=299,
+                                height="35vh",
                                 width="100%",
                                 # borderbottom="2px solid white;",
                             ),
@@ -65,7 +65,7 @@ def split_map_render():
                             zoom=10,
                             zoomControl=False,
                             style=style(
-                                height=299,
+                                height="35vh",
                                 width="100%",
                                 marginTop="2px",
                                 # borderTop="1px solid white;",
@@ -73,7 +73,7 @@ def split_map_render():
                         ),
                     ),
                 ],
-                style={"height": 600, "width": "100%"},
+                style={"height": "70vh", "width": "100%"},
             )
         )
     ]
@@ -113,7 +113,7 @@ def rolling_map_render():
                     ],
                     center={"lng": -118.46965, "lat": 34.04239},
                     zoom=10,
-                    style={"height": 600},
+                    style={"height": "70vh"},
                 ),
                 style={"zIndex": 999},
             )

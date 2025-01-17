@@ -7,8 +7,6 @@ import feffery_antd_charts as fact
 
 from dash.dependencies import Input, Output, State
 
-import json
-import geopandas as gpd
 
 from server import app
 
@@ -24,7 +22,7 @@ chart_style = {
 
 def render():
     return [
-        fac.AntdTitle("烧毁面积", level=5, style={"margin": "0px"}),
+        fac.AntdTitle("烧毁面积", level=5, className="subtitle1"),
         html.Div(
             fact.AntdBar(
                 id="burn-area",
@@ -32,6 +30,7 @@ def render():
                 xField="烧毁面积(km2)",
                 yField="fire_name",
                 label={"position": "right"},
+                xAxis={"max": 120},
                 minBarWidth=20,
                 maxBarWidth=25,
                 height=250,
@@ -39,13 +38,14 @@ def render():
             ),
             style=chart_style,
         ),
-        fac.AntdTitle("救灾投入", level=5, style={"margin": "5px"}),
+        fac.AntdTitle("救灾投入", level=5, className="subtitle1"),
         html.Div(
             fact.AntdColumn(
                 id="save-resoucres",
                 data=arcgisdata.save_resoucres_dict(),
                 xField="类型",
                 yField="数量",
+                yAxis={"max": 700},
                 seriesField="名称",
                 label={"position": "top"},
                 legend={"position": "top-right"},
@@ -57,15 +57,16 @@ def render():
             ),
             style=chart_style,
         ),
-        fac.AntdTitle("人员伤亡", level=5, style={"margin": "0px"}),
+        fac.AntdTitle("人员伤亡", level=5, className="subtitle1"),
         html.Div(
             fact.AntdColumn(
                 id="casualties",
                 data=arcgisdata.casualties_dict(),
                 xField="类型",
                 yField="数量",
+                yAxis={"max": 20},
                 seriesField="名称",
-                label={"position": "middle"},
+                label={"position": "top"},
                 isGroup=True,
                 minColumnWidth=15,
                 maxColumnWidth=30,

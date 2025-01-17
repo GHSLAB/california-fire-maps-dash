@@ -15,10 +15,7 @@ import mobile
 app.layout = html.Div(
     [
         fuc.FefferyDeviceDetect(id="device-detect"),
-        html.Div(  # 页面渲染
-            id="page-render",
-            style={"margin": "10px"},
-        ),
+        html.Div(id="page-render", style=style(padding="5px 10px 10px 5px")),  # 上右下左 # 页面渲染
         html.Div(  # 背景图片
             style={
                 "position": "fixed",
@@ -26,7 +23,7 @@ app.layout = html.Div(
                 "left": "0",
                 "width": "100%",
                 "height": "100%",
-                "backgroundImage": "url('/assets/background.png')",
+                "backgroundImage": "url('/assets/background.webp')",
                 "backgroundSize": "cover",  # 调整背景图片的大小
                 "backgroundRepeat": "no-repeat",  # 防止图片重复
                 "backgroundPosition": "center",  # 居中背景图片
@@ -35,7 +32,7 @@ app.layout = html.Div(
             }
         ),
     ],
-    style={"width": "100%", "height": "100vh"},
+    style={"width": "100%"},
 )
 
 
@@ -46,7 +43,19 @@ def device_detect_demo(deviceInfo):
     if deviceInfo is None or deviceInfo["isMobile"] is True:
         return mobile.render()
     else:
-        return [fac.AntdCenter([fac.AntdResult(title="非移动端", subTitle="请切换为移动端访问")])]
+        return [
+            fac.AntdFlex(
+                [
+                    fac.AntdResult(
+                        title="非移动端",
+                        subTitle="请切换为移动端访问",
+                        style=style(marginTop="10vh"),
+                    )
+                ],
+                justify="center",
+                align="center",
+            )
+        ]
 
 
 if __name__ == "__main__":
