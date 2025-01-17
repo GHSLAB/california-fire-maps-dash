@@ -9,8 +9,10 @@ import feffery_antd_charts as fact
 
 from dash.dependencies import Input, Output, State
 
+from datetime import datetime
 
 # 配置
+from server import app
 from config import MapConfig
 
 # 地图组件
@@ -167,27 +169,28 @@ def render():
                 direction="vertical",
                 # style=style(height="150px", width="100%"),
             ),
-            fac.AntdTitle("火势控制进度", level=5),
-            html.Div(
-                fact.AntdBar(
-                    id="save_progress_chart",
-                    data=arcgisdata.save_progress_dict(),
-                    xField="火势控制进度",
-                    yField="区域",
-                    label={"position": "middle"},
-                    minBarWidth=20,
-                    maxBarWidth=25,
-                    height=250,
-                    style=style(padding="10px"),
-                ),
-                style=chart_style,
+            fac.AntdTable(
+                # columns=arcgisdata.save_progress_dict(type="columns"),
+                columns=[
+                    {"title": "区域", "dataIndex": "name"},
+                    {"title": "起火时间(UTC)", "dataIndex": "起火时间"},
+                    {"title": "烧毁面积(km2)", "dataIndex": "烧毁面积"},
+                    {
+                        "title": "火势控制进度",
+                        "dataIndex": "火势控制进度",
+                        "renderOptions": {"renderType": "mini-progress"},
+                        "width": "25%",
+                    },
+                ],
+                data=arcgisdata.save_progress_dict(type="data"),
+                style=style(marginTop="10px"),
             ),
         ],
     )
 
 
 # 图层控制
-@dash.callback(
+@app.callback(
     Output("cbs_fire", "hidden"),
     Input("burned_area_check", "checked"),
 )
@@ -198,7 +201,7 @@ def cbs_fire_check(checked):
         return True
 
 
-@dash.callback(
+@app.callback(
     Output("cbs_evac_order", "hidden"),
     Input("cbs_evac_order_check", "checked"),
 )
@@ -209,7 +212,7 @@ def cbs_evac_order_check(checked):
         return True
 
 
-@dash.callback(
+@app.callback(
     Output("cbs_evac_warning", "hidden"),
     Input("cbs_evac_warning_check", "checked"),
 )

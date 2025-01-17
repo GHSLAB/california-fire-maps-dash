@@ -40,20 +40,19 @@ def render():
                     "label": "资讯",
                     "children": timeline.render(),
                 },
-                {
-                    "key": "画廊",
-                    "label": "画廊",
-                    "children": imagery.render(),
-                },
+                # {
+                #     "key": "画廊",
+                #     "label": "画廊",
+                #     "children": imagery.render(),
+                # },
                 {
                     "key": "关于",
                     "label": "关于",
                     "children": about.render(),
                 },
             ],
-            defaultActiveKey="数据",
-            # type="card",
-            # centered=True,
-            # style={"marginTop": "5px"},
+            defaultActiveKey="主页",
+            tabPosition="top",
+            centered=True,
         ),
     ]

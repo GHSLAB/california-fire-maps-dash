@@ -17,6 +17,28 @@ def write_json_file(file_path, data):
         json.dump(data, file)
 
 
+def calculate_time_difference(time_str):
+    """
+    计算起火时间至当前时间（UTC）的时间差，并格式化为字符串。
+
+    :param time_str: 起火时间字符串，格式为'YYYY-MM-DD HH:MM:SS+00:00'
+    :return: 格式化后的时间差字符串，格式为'X天X小时X分钟'
+    """
+    # 将时间字符串转换为datetime对象
+    time_obj = datetime.datetime.fromisoformat(time_str)
+    # 获取当前时间（UTC）
+    current_time = datetime.datetime.now(tz=datetime.timezone.utc)
+    # 计算时间差
+    time_difference = current_time - time_obj
+    # 提取天数、小时数和分钟数
+    days = time_difference.days
+    hours, remainder = divmod(time_difference.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+    # 格式化时间差为字符串
+    formatted_time_difference = f"{days}天{hours}小时{minutes}分钟"
+    return formatted_time_difference
+
+
 def get_geojson_creation_time(file_path):
     """
     获取GeoJSON文件的创建时间。
@@ -133,13 +155,39 @@ class arcgisdata:
     def incidents_count(cls):
         return cls.active_fire.count()
 
+    # 当前进度
     @classmethod
-    def save_progress_dict(cls):
+    def save_progress_dict(cls, type: str):
         active_fire = cls.incidents[cls.incidents["status"] == "Active"]
-        save_df = active_fire[["name", "percentContained"]]
-        save_df.columns = ["区域", "火势控制进度"]
+        save_df = active_fire[["name", "started", "acresBurned", "percentContained"]]
+
+        # 将 "起火时间" 字段的内容转换为分钟精度
+        save_df["起火时间"] = pd.to_datetime(save_df["started"]).dt.strftime("%m-%d %H:%M")
+
+        # # 计算当前UTC时间至started字段时间的时间差
+        # save_df["火情时间"] = pd.to_datetime(save_df["started"]).apply(
+        #     lambda x: datetime.datetime.now(tz=datetime.timezone.utc) - x
+        # )
+        save_df["烧毁面积"] = round(save_df["acresBurned"] * 0.00404686, 2)
+        # 将 "火势控制进度" 字段的内容转换为百分比格式
+        save_df["火势控制进度"] = save_df["percentContained"].astype(float) / 100
+
         save_df = save_df.dropna()
-        return save_df.sort_values(by="火势控制进度", ascending=False).to_dict("records")
+        if type == "charts":
+            return save_df.sort_values(by="火势控制进度", ascending=False).to_dict("records")
+
+        elif type == "columns":
+            columns_dict = [
+                ({"title": f"{column}", "dataIndex": f"{column}"})
+                for column in save_df.columns.to_list()
+            ]
+            # print(columns_dict)
+            return columns_dict
+
+        elif type == "data":
+            return save_df.sort_values(by="火势控制进度", ascending=False).to_dict("records")
+        else:
+            return None
 
     @classmethod
     def save_resoucres_dict(cls):

@@ -1,13 +1,13 @@
 [
     {
         "id": 61,
-        "time": "Wednesday, 2:19 p.m. PST",
-        "content": "The National Weather Service said winds peaked for the day and would lower into the evening, noting the end of several red flag warnings at 6 p.m. with the exception of warnings in mountainous regions that remain effective until Thursday at 3 p.m."
+        "time": "Thursday, 10:30 a.m. PST",
+        "content": "The Palisades Fire’s containment jumped to 22% while Cal Fire reported 55% containment for the Eaton Fire, 98% containment for the Hurst Fire and 85% containment for the Auto Fire (all red flag warnings in southern California were expired by Thursday evening)."
     },
     {
         "id": 60,
-        "time": "Wednesday, 8:41 a.m. PST",
-        "content": "Cal Fire provided an update on the fires in Los Angeles, reporting 19% containment for the Palisades Fire, 45% containment for the Eaton Fire, 50% containment for the Auto Fire (later upgraded to 85% containment) and 97% containment for the Hurst Fire."
+        "time": "Wednesday, 2:19 p.m. PST",
+        "content": "The National Weather Service said winds peaked for the day and would lower into the evening, noting the end of several red flag warnings at 6 p.m. with the exception of warnings in mountainous regions that remain effective until Thursday at 3 p.m."
     },
     {
         "id": 59,
@@ -147,7 +147,7 @@
     {
         "id": 32,
         "time": "Friday, 5:20 a.m. PST",
-        "content": "Satellite images released by Maxar on Thursday night showed the scale of devastation caused by fires so far as Cal Fire’s latest update says the blazes have destroyed more than 10,000 structures, including homes and businesses."
+        "content": "Satellite images released by Maxar on Jan. 9 showed the scale of devastation caused by fires so far as Cal Fire’s latest update says the blazes have destroyed more than 10,000 structures, including homes and businesses."
     },
     {
         "id": 31,
@@ -161,87 +161,87 @@
     },
     {
         "id": 29,
-        "time": "Thursday, 11:30 p.m. PST",
+        "time": "Jan. 9, 11:30 p.m. PST",
         "content": "The Los Angeles County Fire Department said a fire fighting plane struck by a civilian drone over the Palisades Fire was the SuperScooper—an amphibious plane which can scoop up water from a river or lake and aerially dump it on a fire—and has been grounded, though it managed to land safely."
     },
     {
         "id": 28,
-        "time": "Thursday, 10:30 p.m. PST",
+        "time": "Jan. 9, 10:30 p.m. PST",
         "content": "The death toll from all the fires rose to 10, the Los Angeles County Medical Examiner's office announced."
     },
     {
         "id": 27,
-        "time": "Thursday, 10:00 p.m. PST",
+        "time": "Jan. 9, 10:00 p.m. PST",
         "content": "Los Angeles County Sheriff Robert Luna said his department has requested support from the California National Guard and is trying to implement a curfew between 6 p.m. and 6 a.m. in the areas affected by the Palisades and Eaton fires to prevent looting and other crimes."
     },
     {
         "id": 26,
-        "time": "Thursday, 9:15 p.m. PST",
+        "time": "Jan. 9, 9:15 p.m. PST",
         "content": "The Ventura County Fire Department said, “forward progress of the Kenneth fire has been stopped,” and the fire continues to hold at 960 acres with 0% containment."
     },
     {
         "id": 25,
-        "time": "Thursday, 9:00 p.m. PST",
+        "time": "Jan. 9, 9:00 p.m. PST",
         "content": "The LAPD told local outlets they received a call informing them that a “suspect was ‘attempting to light a fire’ in the area of the Kenneth Fire,” and while the suspect is now in custody the department added: “We are continuing our investigation and we CANNOT confirm any connection to any fire.”"
     },
     {
         "id": 24,
-        "time": "Thursday, 8:35 p.m. PST",
+        "time": "Jan. 9, 8:35 p.m. PST",
         "content": "Los Angeles Police have arrested a man suspected of arson in the Woodland Hills area, and the department told NewsNation they are now investigating if the Kenneth Fire was intentionally set."
     },
     {
         "id": 23,
-        "time": "Thursday, 5:09 p.m. PST",
-        "content": "Newsom approved a request from Los Angeles County to deploy 8,000 National Guard members to the region to help combat fires and prevent looting (the sheriff’s department arrested 20 people for looting as of Thursday afternoon)."
+        "time": "Jan. 9, 5:09 p.m. PST",
+        "content": "Newsom approved a request from Los Angeles County to deploy 8,000 National Guard members to the region to help combat fires and prevent looting (the sheriff’s department arrested 20 people for looting as of Jan. 9)."
     },
     {
         "id": 22,
-        "time": "Thursday, 4:35 p.m. PST",
+        "time": "Jan. 9, 4:35 p.m. PST",
         "content": "The NFL announced the Jan. 13 wild card playoff matchup between the Los Angeles Rams and Minnesota Vikings will be moved from SoFi Stadium in the Los Angeles area to State Farm Stadium in Glendale, Arizona, citing concerns for public safety."
     },
     {
         "id": 21,
-        "time": "Thursday, 3:16 p.m. PST",
+        "time": "Jan. 9, 3:16 p.m. PST",
         "content": "The Kenneth Fire began in the neighborhood of West Hills and spread to 50 acres, triggering evacuation orders for some residents in the Hidden Hills community."
     },
     {
         "id": 20,
-        "time": "Thursday, 3 p.m. PST",
+        "time": "Jan. 9, 3 p.m. PST",
         "content": "The death toll from the fires reached six, according to multiple outlets, with the city of Malibu reporting its first death of a resident killed in the Palisades fire."
     },
     {
         "id": 19,
-        "time": "Thursday, 1:55 p.m. PST",
+        "time": "Jan. 9, 1:55 p.m. PST",
         "content": "Biden said the federal government will pay the full cost of the disaster response for 180 days, covering the costs of things like “debris and hazard removal, temporary shelters, first responders’ salaries and all necessary measures to protect life and property” (the federal funding initially covered 75% of eligible firefighting costs)."
     },
     {
         "id": 18,
-        "time": "Thursday, 11:27 a.m. PST",
+        "time": "Jan. 9, 11:27 a.m. PST",
         "content": "Bass said the Sunset fire in the Hollywood Hills was “fully contained” after the fire began Wednesday evening and spread to 43 acres."
     },
     {
         "id": 17,
-        "time": "Thursday, 11:27 a.m. PST",
+        "time": "Jan. 9, 11:27 a.m. PST",
         "content": "Los Angeles Unified School District announced its schools and offices will remain closed through Friday, adding students will continue to have access to digital academic resources, meal distribution and mental health support services."
     },
     {
         "id": 16,
-        "time": "Thursday, 9:55 a.m. PST",
+        "time": "Jan. 9, 9:55 a.m. PST",
         "content": "Pasadena urged residents in a portion of the city to not use tap water for drinking or cooking “until further notice,” citing the Eaton Fire’s damage to reservoirs and pump stations that potentially impacted water quality in certain areas."
     },
     {
         "id": 15,
-        "time": "Thursday, 4 a.m. PST",
+        "time": "Jan. 9, 4 a.m. PST",
         "content": "The wildfires severely impacted the air quality in the Los Angeles area with levels of PM 2.5 pollutants—airborne particles less than 2.5 microns in diameter—hitting 165, which is labeled “unhealthy” by the EPA’s AirNow tracker and 11 times above the World Health Organization’s recommended safe limit of 15."
     },
     {
         "id": 14,
-        "time": "Thursday 3 a.m. PST",
+        "time": "Jan. 9, 3 a.m. PST",
         "content": "At least 2,000 homes, businesses and other buildings have been destroyed by the fires so far, and more than 130,000 people have been forced to evacuate—some even multiple times as the fires spread to other parts of Los Angeles county."
     },
     {
         "id": 13,
-        "time": "Thursday 12:30 a.m. PST",
+        "time": "Jan. 9, 12:30 a.m. PST",
         "content": "The Los Angeles Fire Department said “the majority of the Evacuation Zone for the Sunset Fire is LIFTED” in an update shortly after midnight as Cal Fire’s tracker showed the size of the blaze in the Hollywood Hills shrinking from its previous size of 60 acres to 43 acres at 12:17 a.m. PST."
     },
     {

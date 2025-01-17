@@ -30,7 +30,7 @@ app.layout = html.Div(
                 "backgroundSize": "cover",  # 调整背景图片的大小
                 "backgroundRepeat": "no-repeat",  # 防止图片重复
                 "backgroundPosition": "center",  # 居中背景图片
-                "opacity": "0.2",
+                "opacity": "0.4",
                 "zIndex": "-1",
             }
         ),
