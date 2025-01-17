@@ -6,51 +6,9 @@ from feffery_dash_utils.style_utils import style
 
 from dash.dependencies import Input, Output, State
 
-import json
-
 from server import app
 
-
-def get_timeline_item(timeline_file: str) -> dict:
-    with open(timeline_file, "r", encoding="utf-8") as file:
-        timeline = json.load(file)
-    item_dict = []
-    for i in reversed(timeline):
-        item_dict.append(
-            {
-                "content": fac.AntdFlex(
-                    [
-                        fac.AntdText(f"{i['time']}", style=style(fontWeight="bold")),
-                        fac.AntdText(f"{i['content']}"),
-                    ],
-                    vertical=True,
-                )
-            }
-        )
-    return item_dict
-
-
-def get_json_config(timeline_file: str, column: str) -> str:
-    with open(timeline_file, "r", encoding="utf-8") as file:
-        data = json.load(file)[0]
-    return data[f"{column}"]
-
-
-# timeline
-def timeline():
-    return get_timeline_item("./data/forbes/timeline.json")
-
-
-def update_time():
-    return get_json_config("./data/forbes/update_time.json", "Last updated")
-
-
-def timeline_cn():
-    return get_timeline_item("./data/forbes/timeline_cn.json")
-
-
-def translate_time():
-    return get_json_config("./data/forbes/translate_time.json", "Last updated")
+from models import forbes
 
 
 def render():
@@ -90,7 +48,10 @@ def render():
                         # fac.AntdSpin(fac.AntdText(id="spin-refresh"), text="数据获取中"),
                         fac.AntdSpace(
                             fac.AntdTimeline(
-                                id="timeline", pending="NOW", items=timeline(), reverse=True
+                                id="timeline",
+                                pending="NOW",
+                                items=forbes.calFireTimeline.items(),
+                                reverse=True,
                             )
                         ),
                     ],
@@ -104,7 +65,7 @@ def render():
                         "borderRadius": "5px",
                         "boxShadow": "0 0 10px rgba(0, 0, 0, 0.3)",
                         "border": "1px solid #f0f0f0",
-                        "padding": "20px",
+                        "padding": "10px",
                     },
                 ),
                 fac.AntdBackTop(
@@ -115,13 +76,13 @@ def render():
                 fac.AntdFlex(
                     [
                         fac.AntdText(
-                            f"更新时间: {update_time()}",
+                            f"更新时间: {forbes.calFireTimeline.update_time()}",
                             id="update-time",
                             style=style(marginLeft="5px"),
                         ),
                         html.A(
                             "from Forbes",
-                            href="https://www.forbes.com/sites/antoniopequenoiv/2025/01/12/california-wildfire-live-updates-death-toll-hits-24-in-palisades-eaton-fires-as-heavy-wind-expected-in-coming-days/",
+                            href=str(forbes.calFireTimeline.url),
                             style=style(position="absolute", right="15px", color="#8B8B8B"),
                         ),
                     ],
@@ -134,8 +95,6 @@ def render():
 
 
 # 回调
-
-
 # 切换方向
 @app.callback(
     Output("timeline", "reverse", allow_duplicate=True),
@@ -165,6 +124,12 @@ def switch_language(nClicks):
         # 计算nClicks是否为单数
         is_odd = nClicks % 2 != 0
         if is_odd:
-            return [timeline_cn(), f"翻译时间: {translate_time()}"]
+            return [
+                forbes.calFireTimeline.items_cn(),
+                f"翻译时间: {forbes.calFireTimeline.translate_time()}",
+            ]
         else:
-            return [timeline(), f"更新时间: {update_time()}"]
+            return [
+                forbes.calFireTimeline.items(),
+                f"更新时间: {forbes.calFireTimeline.update_time()}",
+            ]
