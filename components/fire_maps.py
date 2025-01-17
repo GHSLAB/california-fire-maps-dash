@@ -92,7 +92,7 @@ def rolling_map_render():
                     ],
                     center={"lng": -118.46965, "lat": 34.04239},  # 34.04239/-118.46965
                     zoom=10,
-                    style={"height": 600},
+                    style={"height": "70vh"},
                 ),
                 secondItem=flc.LeafletMap(
                     [
