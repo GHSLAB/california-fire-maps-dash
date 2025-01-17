@@ -1,7 +1,17 @@
 # california-fire-maps-dash
+
+数据可视化练习项目，基于Python开发的Dash应用，展示2025加州山火地图数据
+
 rough demo on california fire maps apps powered by dash, python
 
-suitable layout for desktop and mobile
+![screenshot](assets/screenshot.png)
+
+
+## Dash组件
+- feffery-antd-components
+- feffery-antd-charts
+- feffery-leaflet-components
+- feffery_utils_components
 
 
 ## data source

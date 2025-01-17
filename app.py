@@ -51,5 +51,5 @@ def device_detect_demo(deviceInfo):
 
 if __name__ == "__main__":
 
-    # app.run(port=AppConfig.debug_port, debug=True)
-    app.run(host="0.0.0.0", debug=False)
+    app.run(port=AppConfig.debug_port, debug=True)  # 调试模式
+    # app.run(host="0.0.0.0", debug=False) # 生产模式

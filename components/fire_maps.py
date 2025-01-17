@@ -6,14 +6,10 @@ import feffery_utils_components as fuc
 import feffery_leaflet_components as flc
 from feffery_dash_utils.style_utils import style
 
-from dash.dependencies import Input, Output, State, ALL, MATCH
-
-import geopandas as gpd
-import json
+from dash.dependencies import Input, Output
 
 from maps.basemap import Basemap
 
-from config import MapConfig
 from server import app
 
 
@@ -158,39 +154,6 @@ def render():
             justify="space-between",
             style=style(margin=3),
         ),
-        # fac.AntdFlex(
-        #     [
-        #         fac.AntdButton(
-        #             f"{date}",
-        #             id={"type": "button", "index": date},
-        #             type="primary" if date == "01-14" else "default",
-        #         )
-        #         for date in maxar_date
-        #     ],
-        #     vertical=False,
-        #     justify="space-around",
-        #     style=style(marginTop=10),
-        # ),
-        # fac.AntdSteps(
-        #     steps=[
-        #         {
-        #             "title": f"步骤{i + 1}",
-        #         }
-        #         for i in range(5)
-        #     ],
-        #     labelPlacement="vertical",
-        # ),
-        # fac.AntdSegmented(
-        #     options=[
-        #         {"label": "01-14", "value": "0114"},
-        #         {"label": "01-13", "value": "0113"},
-        #         {"label": "01-10", "value": "0110"},
-        #         {"label": "01-09", "value": "0109"},
-        #         {"label": "01-08", "value": "0108"},
-        #     ],
-        #     size="large",
-        #     defaultValue="0114",
-        # ),
     ]
 
 
@@ -220,27 +183,3 @@ def split_mode(nClicks):
 def rolling_mode(nClicks):
     if nClicks:
         return ["default", "primary", rolling_map_render()]
-
-    # return [
-    #     fuc.FefferyCompareSlider(
-    #         firstItem=flc.LeafletMap(
-    #             [Basemap.arcgis_imgery()],
-    #             center=MapConfig.deafult_center,
-    #             zoom=12,
-    #             zoomControl=False,
-    #             style={"width": 800, "height": 500},
-    #         ),
-    #         secondItem=flc.LeafletMap(
-    #             [
-    #                 flc.LeafletTileLayer(
-    #                     url="https://stormscdn.ngs.noaa.gov/20250114m-maxar/{z}/{x}/{y}"
-    #                 )
-    #             ],
-    #             center=MapConfig.deafult_center,
-    #             zoom=12,
-    #             zoomControl=False,
-    #             style={"width": 800, "height": 500},
-    #         ),
-    #         style={"width": 800, "height": 500},
-    #     ),
-    # ]

@@ -5,11 +5,9 @@ from dash import html
 import feffery_antd_components as fac
 import feffery_leaflet_components as flc
 from feffery_dash_utils.style_utils import style
-import feffery_antd_charts as fact
 
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 
-from datetime import datetime
 
 # 配置
 from server import app
@@ -23,8 +21,6 @@ from maps import tile_selector, symbol_style
 # 数据
 from models.gpd_data import cbsdata, arcgisdata
 
-from components.dashboard import chart_style
-
 
 def render():
     return html.Div(
@@ -33,7 +29,6 @@ def render():
                 [
                     flc.LeafletMap(
                         [
-                            # Basemap.arcgis_imgery(),
                             flc.LeafletTileLayer(id="tile-layer", zIndex=1, opacity=0.8),
                             Basemap.light_labels(),
                             flc.LeafletLayerGroup(  # cbs_fire
@@ -117,10 +112,6 @@ def render():
                 [
                     fac.AntdSpace(
                         [
-                            # fac.AntdText(
-                            #     "受灾情况",
-                            #     style=style(fontWeight="bold"),
-                            # ),
                             fac.AntdCheckbox(id="burned_area_check", checked=True),
                             Legend.fill("烧毁区域", symbol_style.cbs.Fire["fillColor"]),
                             fac.AntdCheckbox(
@@ -141,36 +132,10 @@ def render():
                         ],
                         style=style(marginTop="5px"),
                     ),
-                    # fac.AntdSpace(
-                    #     [
-                    #         fac.AntdText(
-                    #             "疏散情况",
-                    #             style=style(fontWeight="bold"),
-                    #         ),
-                    #         # fac.AntdCheckbox(
-                    #         #     id="cbs_evac_order_check",
-                    #         #     checked=False,
-                    #         # ),
-                    #         # Legend.fill(
-                    #         #     "疏散命令",
-                    #         #     symbol_style.cbs.Evacuation_Order["fillColor"],
-                    #         # ),
-                    #         # fac.AntdCheckbox(
-                    #         #     id="cbs_evac_warning_check",
-                    #         #     checked=False,
-                    #         # ),
-                    #         # Legend.fill(
-                    #         #     "疏散警告", symbol_style.cbs.Evacuation_Warning["fillColor"]
-                    #         # ),
-                    #     ],
-                    #     direction="horizontal",
-                    # ),
                 ],
                 direction="vertical",
-                # style=style(height="150px", width="100%"),
             ),
             fac.AntdTable(
-                # columns=arcgisdata.save_progress_dict(type="columns"),
                 columns=[
                     {"title": "区域", "dataIndex": "name"},
                     {"title": "起火时间(UTC)", "dataIndex": "起火时间"},

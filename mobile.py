@@ -7,7 +7,7 @@ import feffery_leaflet_components as flc
 
 from feffery_dash_utils.style_utils import style
 
-from components import home, fire_maps, dashboard, imagery, timeline, about
+from components import home, fire_maps, dashboard, timeline, about
 
 
 def render():
@@ -40,11 +40,6 @@ def render():
                     "label": "数据统计",
                     "children": dashboard.render(),
                 },
-                # {
-                #     "key": "画廊",
-                #     "label": "画廊",
-                #     "children": imagery.render(),
-                # },
                 {
                     "key": "about",
                     "label": "关于",

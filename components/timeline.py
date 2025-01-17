@@ -10,9 +10,6 @@ import json
 
 from server import app
 
-# import models.data_update
-import datetime
-
 
 def get_timeline_item(timeline_file: str) -> dict:
     with open(timeline_file, "r", encoding="utf-8") as file:
@@ -64,27 +61,12 @@ def render():
                 fac.AntdSpace(
                     fac.AntdFlex(
                         [
-                            # fac.AntdButton(
-                            #     "重载",
-                            #     id="reload",
-                            #     disabled=False,
-                            #     type="primary",
-                            # ),
                             fac.AntdButton(
                                 "翻转",
                                 id="switch-timeline",
                                 disabled=False,
                                 type="primary",
                                 style=style(marginLeft="5px"),
-                            ),
-                            fac.AntdTooltip(
-                                fac.AntdButton(
-                                    "实时数据",
-                                    id="update-timeline",
-                                    disabled=True,
-                                    style=style(marginLeft="5px"),
-                                ),
-                                title="抓取实时数据, 请等待",
                             ),
                             fac.AntdButton(
                                 fac.AntdIcon(
@@ -167,41 +149,6 @@ def switch_timeline(nClicks, reverse):
             return True
         else:
             return False
-
-
-# # 获取最新数据
-# @app.callback(
-#     [
-#         Output("timeline", "items", allow_duplicate=True),
-#         Output("update-time", "children", allow_duplicate=True),
-#     ],
-#     Input("update-timeline", "nClicks"),
-#     prevent_initial_call=True,
-# )
-# def update_timeline(nClicks):
-#     if nClicks:
-#         forbes_timeline = models.data_update.get_forbes_timeline()
-
-#         print(forbes_timeline)
-
-#         item_dict = []
-#         for i in reversed(forbes_timeline):
-#             item_dict.append(
-#                 {
-#                     "content": fac.AntdFlex(
-#                         [
-#                             fac.AntdText(f"{i['time']}", style=style(fontWeight="bold")),
-#                             fac.AntdText(f"{i['content']}"),
-#                         ],
-#                         vertical=True,
-#                     )
-#                 }
-#             )
-#         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-#         return [
-#             item_dict,
-#             f"更新时间：{current_time}",
-#         ]
 
 
 # 切换翻译
