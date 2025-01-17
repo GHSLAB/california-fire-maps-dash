@@ -12,9 +12,9 @@ def render():
             [
                 fac.AntdFlex(
                     [
-                        fac.AntdCenter(
-                            fac.AntdTag(content=f"累计访问人次 {access_log.method_counts()}")
-                        ),
+                        # fac.AntdCenter(
+                        #     fac.AntdTag(content=f"累计访问人次 {access_log.method_counts()}")
+                        # ),
                         fac.AntdTitle("本应用仅为技术测试", level=5),
                         fac.AntdText("数据定时抓取, 非实时消息, 仅供参考"),
                         fac.AntdTitle("欢迎关注公众号交流", level=5),
