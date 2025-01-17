@@ -15,11 +15,11 @@ def render():
             html.Div(
                 [
                     fac.AntdFlex(
-                        fac.AntdTitle("2025 加州山火地图", level=4, className="subtitle1"),
+                        fac.AntdTitle("2025 加州山火地图", level=4, style={"margin": "0px"}),
                         justify="center",
                     ),
                     fac.AntdFlex(
-                        fac.AntdTitle("California Fire Map", level=4, className="subtitle1"),
+                        fac.AntdTitle("California Fire Map", level=4, style={"margin": "0px"}),
                         justify="center",
                     ),
                 ],

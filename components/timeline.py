@@ -57,8 +57,10 @@ def render():
                     ],
                     id="back-top-container-demo",
                     style={
-                        "height": "calc(100vh - 300px)",
-                        "maxHeight": "calc(100vh - 300px)",
+                        # "height": "calc(100vh - 300px)",
+                        # "maxHeight": "calc(100vh - 300px)",
+                        "height": "calc(65vh)",
+                        "maxHeight": "calc(65vh)",
                         "overflowY": "auto",
                         "position": "relative",
                         "backgroundColor": "rgba(240, 240, 240, 0.5)",

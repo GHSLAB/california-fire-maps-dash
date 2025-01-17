@@ -85,6 +85,14 @@ def render():
                             ],
                             vertical=True,
                         ),
+                        fac.AntdDivider(),
+                        fac.AntdCenter(
+                            html.A(
+                                "© 2025 California Fire Map",
+                                href="http://lafire.ghslab.cn",
+                                style=style(fontSize="12px", color="#8B8B8B"),
+                            ),
+                        ),
                     ],
                     vertical=True,
                 )
