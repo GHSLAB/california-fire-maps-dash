@@ -28,6 +28,7 @@ share/python-wheels/
 logs/
 noteboooks/
 /noteboooks
+/workshop
 /data/backup
 *.ipynb
 *.psd
