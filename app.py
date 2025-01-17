@@ -50,5 +50,6 @@ def device_detect_demo(deviceInfo):
 
 
 if __name__ == "__main__":
+
     # app.run(port=AppConfig.debug_port, debug=True)
     app.run(host="0.0.0.0", debug=False)

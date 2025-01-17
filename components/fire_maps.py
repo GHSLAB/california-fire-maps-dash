@@ -19,6 +19,8 @@ from server import app
 
 maxar_url = "https://stormscdn.ngs.noaa.gov/20250116m-maxar/{z}/{x}/{y}"
 
+maxar_url2 = "https://stormscdn.ngs.noaa.gov/20250114m-maxar/{z}/{x}/{y}"
+
 
 def split_map_render():
     return [
@@ -51,6 +53,10 @@ def split_map_render():
                                 flc.LeafletTileLayer(
                                     url=maxar_url,
                                     zIndex=99,
+                                ),
+                                flc.LeafletTileLayer(
+                                    url=maxar_url2,
+                                    zIndex=89,
                                 ),
                                 flc.LeafletTileLayer(
                                     url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -97,6 +103,10 @@ def rolling_map_render():
                         flc.LeafletTileLayer(
                             url=maxar_url,
                             zIndex=99,
+                        ),
+                        flc.LeafletTileLayer(
+                            url=maxar_url2,
+                            zIndex=89,
                         ),
                         flc.LeafletTileLayer(
                             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
