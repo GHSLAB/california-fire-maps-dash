@@ -10,7 +10,7 @@ import json
 
 from server import app
 
-import utils.data_update
+# import models.data_update
 import datetime
 
 
@@ -169,39 +169,39 @@ def switch_timeline(nClicks, reverse):
             return False
 
 
-# 获取最新数据
-@app.callback(
-    [
-        Output("timeline", "items", allow_duplicate=True),
-        Output("update-time", "children", allow_duplicate=True),
-    ],
-    Input("update-timeline", "nClicks"),
-    prevent_initial_call=True,
-)
-def update_timeline(nClicks):
-    if nClicks:
-        forbes_timeline = utils.data_update.get_forbes_timeline()
+# # 获取最新数据
+# @app.callback(
+#     [
+#         Output("timeline", "items", allow_duplicate=True),
+#         Output("update-time", "children", allow_duplicate=True),
+#     ],
+#     Input("update-timeline", "nClicks"),
+#     prevent_initial_call=True,
+# )
+# def update_timeline(nClicks):
+#     if nClicks:
+#         forbes_timeline = models.data_update.get_forbes_timeline()
 
-        print(forbes_timeline)
+#         print(forbes_timeline)
 
-        item_dict = []
-        for i in reversed(forbes_timeline):
-            item_dict.append(
-                {
-                    "content": fac.AntdFlex(
-                        [
-                            fac.AntdText(f"{i['time']}", style=style(fontWeight="bold")),
-                            fac.AntdText(f"{i['content']}"),
-                        ],
-                        vertical=True,
-                    )
-                }
-            )
-        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-        return [
-            item_dict,
-            f"更新时间：{current_time}",
-        ]
+#         item_dict = []
+#         for i in reversed(forbes_timeline):
+#             item_dict.append(
+#                 {
+#                     "content": fac.AntdFlex(
+#                         [
+#                             fac.AntdText(f"{i['time']}", style=style(fontWeight="bold")),
+#                             fac.AntdText(f"{i['content']}"),
+#                         ],
+#                         vertical=True,
+#                     )
+#                 }
+#             )
+#         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+#         return [
+#             item_dict,
+#             f"更新时间：{current_time}",
+#         ]
 
 
 # 切换翻译
