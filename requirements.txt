@@ -1,7 +1,0 @@
-dash==2.18.2
-feffery_antd_components==0.3.12
-feffery_dash_utils==0.1.5
-feffery_leaflet_components==0.1.0rc7
-feffery_utils_components==0.2.0rc25
-Requests==2.32.3
-beautifulsoup4==4.12.3

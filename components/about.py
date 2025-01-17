@@ -13,8 +13,10 @@ def render():
         fac.AntdCenter(
             fac.AntdFlex(
                 [
-                    fac.AntdTitle("本应用仅为技术测试, 信息仅供参考", level=5),
-                    fac.AntdText("欢迎关注公众号交流"),
+                    fac.AntdTitle("本应用仅为技术测试", level=5),
+                    fac.AntdText("数据定时抓取, 非实时消息, 仅供参考"),
+                    fac.AntdDivider(style=style(marginTop="5px", marginBottom="5px")),
+                    fac.AntdTitle("欢迎关注公众号交流", level=5),
                     fac.AntdImage(
                         src="/assets/qrcode.png",
                         style=style(width="250px"),

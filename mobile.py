@@ -21,24 +21,24 @@ def render():
         fac.AntdTabs(
             items=[
                 {
-                    "key": "主页",
+                    "key": "homepage",
                     "label": "主页",
                     "children": home.render(),
-                },
-                {
-                    "key": "地图",
-                    "label": "地图",
-                    "children": fire_maps.render(),
-                },
-                {
-                    "key": "数据",
-                    "label": "数据",
-                    "children": dashboard.render(),
                 },
                 {
                     "key": "资讯",
                     "label": "资讯",
                     "children": timeline.render(),
+                },
+                {
+                    "key": "maps",
+                    "label": "卫星影像",
+                    "children": fire_maps.render(),
+                },
+                {
+                    "key": "stats",
+                    "label": "数据统计",
+                    "children": dashboard.render(),
                 },
                 # {
                 #     "key": "画廊",
@@ -46,12 +46,12 @@ def render():
                 #     "children": imagery.render(),
                 # },
                 {
-                    "key": "关于",
+                    "key": "about",
                     "label": "关于",
                     "children": about.render(),
                 },
             ],
-            defaultActiveKey="主页",
+            defaultActiveKey="homepage",
             tabPosition="top",
             centered=True,
         ),

@@ -17,6 +17,9 @@ from config import MapConfig
 from server import app
 
 
+maxar_url = "https://stormscdn.ngs.noaa.gov/20250116m-maxar/{z}/{x}/{y}"
+
+
 def split_map_render():
     return [
         flc.LeafletMapProvider(
@@ -33,7 +36,7 @@ def split_map_render():
                                 flc.LeafletMapSync(id="split-map1"),
                             ],
                             center={"lng": -118.46965, "lat": 34.04239},  # 34.04239/-118.46965
-                            zoom=12,
+                            zoom=10,
                             style=style(
                                 height=299,
                                 width="100%",
@@ -46,7 +49,7 @@ def split_map_render():
                             [
                                 Basemap.light_labels(),
                                 flc.LeafletTileLayer(
-                                    url="https://stormscdn.ngs.noaa.gov/20250114m-maxar/{z}/{x}/{y}",
+                                    url=maxar_url,
                                     zIndex=99,
                                 ),
                                 flc.LeafletTileLayer(
@@ -57,7 +60,7 @@ def split_map_render():
                                 flc.LeafletMapSync(id="split-map2"),
                             ],
                             center={"lng": -118.46965, "lat": 34.04239},  # 34.04239/-118.46965
-                            zoom=12,
+                            zoom=10,
                             zoomControl=False,
                             style=style(
                                 height=299,
@@ -86,13 +89,13 @@ def rolling_map_render():
                         flc.LeafletMapSync(id="split-map1"),
                     ],
                     center={"lng": -118.46965, "lat": 34.04239},  # 34.04239/-118.46965
-                    zoom=12,
+                    zoom=10,
                     style={"height": 600},
                 ),
                 secondItem=flc.LeafletMap(
                     [
                         flc.LeafletTileLayer(
-                            url="https://stormscdn.ngs.noaa.gov/20250114m-maxar/{z}/{x}/{y}",
+                            url=maxar_url,
                             zIndex=99,
                         ),
                         flc.LeafletTileLayer(
@@ -103,7 +106,7 @@ def rolling_map_render():
                         flc.LeafletMapSync(id="split-map2"),
                     ],
                     center={"lng": -118.46965, "lat": 34.04239},
-                    zoom=12,
+                    zoom=10,
                     style={"height": 600},
                 ),
                 style={"zIndex": 999},
@@ -141,7 +144,7 @@ def render():
             style=style(marginTop=10, borderRadius=15),
         ),
         fac.AntdFlex(
-            [fac.AntdText("数据源: ArcGIS/MAXAR"), fac.AntdText("时间:2025-01-14")],
+            [fac.AntdText("数据源: ArcGIS/MAXAR"), fac.AntdText("时间:2025-01-16")],
             justify="space-between",
             style=style(margin=3),
         ),
