@@ -25,3 +25,12 @@ https://www.fire.ca.gov
 https://hub.wftiic.ca.gov
 
 https://protect.genasys.com/hazards
+
+
+
+## run
+
+```cmd
+pip install -i https://mirrors.tencent.com/pypi/simple -r requirements.txt && python app.py
+```
+
