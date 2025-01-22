@@ -9,6 +9,7 @@ from feffery_dash_utils.style_utils import style
 from dash.dependencies import Input, Output
 
 from maps.basemap import Basemap
+from maps.maxar import MaxarServer
 
 from server import app
 
@@ -47,11 +48,11 @@ def split_map_render():
                             [
                                 Basemap.light_labels(),
                                 flc.LeafletTileLayer(
-                                    url=maxar_url,
+                                    url=MaxarServer.url(date="20250116"),
                                     zIndex=99,
                                 ),
                                 flc.LeafletTileLayer(
-                                    url=maxar_url2,
+                                    url=MaxarServer.url(date="20250114"),
                                     zIndex=89,
                                 ),
                                 flc.LeafletTileLayer(
