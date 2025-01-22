@@ -1,8 +1,18 @@
 [
     {
+        "id": 63,
+        "time": "Friday, 4:50 p.m. PST",
+        "content": "Cal Fire reported 31% containment on the 23,713-acre Palisades Fire, meaning firefighters now have control of about one-third of the perimeter of the fire; Cal Fire also reported 65% containment for the Eaton Fire and full containment of the Auto and Hurst fires."
+    },
+    {
+        "id": 62,
+        "time": "Friday, 12:36 p.m. PST",
+        "content": "Los Angeles County District Attorney Nathan Hochman announced another eight people were charged for crimes linked to the wildfires in Los Angeles, bringing the total to 17 as the accused face charges such as looting, arson and impersonation of a firefighter."
+    },
+    {
         "id": 61,
-        "time": "Thursday, 10:30 a.m. PST",
-        "content": "The Palisades Fire’s containment jumped to 22% while Cal Fire reported 55% containment for the Eaton Fire, 98% containment for the Hurst Fire and 85% containment for the Auto Fire (all red flag warnings in southern California were expired by Thursday evening)."
+        "time": "Friday, 9:52 a.m. PST",
+        "content": "No red flag warnings were in effect for Los Angeles and neighboring counties as the National Weather Service forecasted cooler and mostly sunny weather for Friday and Saturday, as well as another Santa Ana wind event “likely” to materialize late Monday into Tuesday."
     },
     {
         "id": 60,
@@ -42,7 +52,7 @@
     {
         "id": 53,
         "time": "Monday, 9:00 p.m. PST",
-        "content": "The Los Angeles Department of Water and Power issued a warning that it may be forced to cut off power supply—with outages potentially lasting as long as 48 hours—in certain areas as a safety measure to prevent wildfires while the Red Flag Warning remains in effect until Friday."
+        "content": "The Los Angeles Department of Water and Power issued a warning that it may be forced to cut off power supply—with outages potentially lasting as long as 48 hours—in certain areas as a safety measure to prevent wildfires while the Red Flag Warning remained in effect."
     },
     {
         "id": 52,
@@ -52,7 +62,7 @@
     {
         "id": 51,
         "time": "Monday, 2:00 p.m. PST",
-        "content": "Los Angeles County District Attorney Nathan Hochman announced nine people were charged in connection to looting carried out in the Pacific Palisades and Altadena, in addition to one arson charge for a man who allegedly started a fire in the city of Azusa, which is located about 20 miles east of Altadena."
+        "content": "Hochman announced nine people were charged in connection to looting carried out in the Pacific Palisades and Altadena, in addition to one arson charge for a man who allegedly started a fire in the city of Azusa, which is located about 20 miles east of Altadena."
     },
     {
         "id": 50,
